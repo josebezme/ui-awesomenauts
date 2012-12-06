@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>UI Assignment 3</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+		<link rel="stylesheet" href="styles.css">
+		<script src="js/mustache.js"></script>
+		<script src="js/jquery_1.8.2.min.js"></script>
+	</head>
+	<body>
+		<br />
+		<br />
+		<div class="tag-assignment-wrapper">
+			<h2>Choose tags for</h2>
+			<div id="chosen-tags" class="tag-container">
+				<strong>{insert name}</strong>
+				<span class="tag">Sushi 
+					<span class="tag-remove">| 
+						<a href="#" onclick="alert('Remove');return false;">X</a>
+					</span>
+				</span>
+			</div>
+			<h2>Existing Tags</h2>
+			<div id="existing-tags" class="tag-container">
+				<span class="tag">Tried it</span>
+				<span class="tag">Try it</span>
+
+
+			</div>
+
+			<h2>Recommended Tags</h2>
+			<div id="recommended-tags" class="tag-container">
+				<span class="tag">Japanese</span>
+			</div>
+
+			<h2>Add New Tag</h2>
+			<form>
+				<input type="text" style="width: 300px;font-size:18px;"/> 
+				<a href="#" class="button">Add</a>
+			</form>
+
+			<div style="clear: both;"></div>
+			<div style="text-align:right;padding: 30px;">
+				<a href="#" class="button">Submit</a>
+			</div>
+		</div>
+
+	</body>
+</html>
