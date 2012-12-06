@@ -46,6 +46,14 @@ h2 {
 	padding: 8px;
 }
 
+.tag-clickable {
+	cursor: pointer;
+}
+
+.tag-clickable:hover {
+	background: #E58739;	
+}
+
 .tag-remove {
 	color: #ccc;
 	margin-left: 5px;

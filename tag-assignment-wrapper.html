@@ -9,6 +9,21 @@
 		<link rel="stylesheet" href="styles.css">
 		<script src="js/mustache.js"></script>
 		<script src="js/jquery_1.8.2.min.js"></script>
+		<script type="text/javascript">
+
+			function addTag(e) {
+				var $e = $(e);
+				
+				$e.unbind('click');
+
+				$e.remove();
+				$e.appendTo($('#chosen-tags'));
+				$remove = $e.find($('.tag-remove'));
+				$remove.css('display', 'inline');
+
+				$e.removeClass('tag-clickable');
+			}
+		</script>
 	</head>
 	<body>
 		<br />
@@ -25,15 +40,28 @@
 			</div>
 			<h2>Existing Tags</h2>
 			<div id="existing-tags" class="tag-container">
-				<span class="tag">Tried it</span>
-				<span class="tag">Try it</span>
+				<span class="tag tag-clickable" onclick="addTag(this);">Tried it
+					<span class="tag-remove" style="display:none;">| 
+						<a href="#" onclick="alert('Remove');return false;">X</a>
+					</span>
+				</span>
+				<span class="tag tag-clickable" onclick="addTag(this);">Try it
+					<span class="tag-remove" style="display:none;">| 
+						<a href="#" onclick="alert('Remove');return false;">X</a>
+					</span>
+				</span>
 
 
 			</div>
 
 			<h2>Recommended Tags</h2>
 			<div id="recommended-tags" class="tag-container">
-				<span class="tag">Japanese</span>
+				<span class="tag tag-clickable" onclick="addTag(this);">Japanese
+					<span class="tag-remove" style="display:none;">| 
+						<a href="#" onclick="alert('Remove');return false;">X</a>
+					</span>
+				</span>
+
 			</div>
 
 			<h2>Add New Tag</h2>
