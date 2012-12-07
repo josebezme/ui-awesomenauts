@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Yelp Wrapper Test</title>
+        <!--
+        This example is a proof of concept, for how to use the Yelp v2 API with javascript.
+        You wouldn't actually want to expose your access token secret like this in a real application.
+        -->
+
+        <title>Yelp Wrapper Test</title>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+        <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
+        <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
+        <script type="text/javascript" src="https://raw.github.com/padolsey/prettyPrint.js/master/prettyprint.js"></script>
+        <script type="text/javascript" src="js/yelp-wrapper.js"></script>
+        <script type="text/javascript">
+            var printer = function(data) {
+                console.log(data);
+                var out = prettyPrint(data);
+                $("body").append(out);
+            };
+            searchAndDo('chinese', '06877', printer);
+
+        </script>
+    </head>
+    <body>
+        <h1>New Web Project Page</h1>
+    </body>
+</html>
+
