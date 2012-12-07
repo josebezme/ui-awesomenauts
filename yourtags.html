@@ -19,8 +19,8 @@
 
 			function addTag(e) {
 				var $e = $(e);
-				
-				$e.unbind('click');
+
+				$e.off('click', 'addTag');
 
 				$e.remove();
 				$e.appendTo($('#chosen-tags'));
@@ -28,6 +28,17 @@
 				$remove.css('display', 'inline');
 
 				$e.removeClass('tag-clickable clear-both');
+			}
+
+			function removeTag(e) {
+				var $e = $(e);
+				$e.remove();
+				$e.appendTo($('#existing-tags'));
+				$remove = $e.find($('.tag-remove'));
+				$remove.css('display', 'none');
+
+				$e.addClass('tag-clickable clear-both');
+				$e.on('click', addTag);
 			}
 		</script>
 </head>
@@ -50,44 +61,27 @@
 			<h1 style="color: red;"> Your Tags </h1>
 		</div>
 		<div class="row-fluid">
-			<div id ="existing-tags" class="well well-small span2">
+			<div class="well well-small span2">
 				<!-- Sidebar for tags -->
 				<h2> Tag List </h2>
-					<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Japanese
-						<span class="tag-remove" style="display:none;">|
-						<a href="#" onclick="alert('Remove');return false;">X</a>
+				<p> Click on tag to filter by that tag </p>
+					<div id ="existing-tags">
+						<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Japanese
+							<span class="tag-remove" onclick="removeTag($(this).parent('.tag'));" style="display:none;">|
+							<a href="#" onclick="alert('Remove');return false;">X</a>
+							</span>
 						</span>
-					</span>
-					<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Italian
-						<span class="tag-remove" style="display:none;">|
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-						</span>
-					</span>
-					<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Expensive
-						<span class="tag-remove" style="display:none;">|
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-						</span>
-					</span>
-					<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Cheap
-						<span class="tag-remove" style="display:none;">|
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-						</span>
-					</span>
-					<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Near Columbia
-						<span class="tag-remove" style="display:none;">|
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-						</span>
-					</span>
-					<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Pizza
-						<span class="tag-remove" style="display:none;">|
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-						</span>
-					</span>
+					</div>
 			</div>
 			<div class="span10">
 				<!-- Main content for filtered businesses go here -->
 				<button type="submit" class="btn btn-warning pull-left">Filter by</button>
 	  			<div id="chosen-tags" class="span10 well well-small">
+	  				<span class="tag pull-left"> Pizza
+						<span class="tag-remove" onclick="removeTag($(this).parent('.tag'));" style="display:inline;">|
+						<a href="#" onclick="alert('Remove');return false;">X</a>
+						</span>
+					</span>
 				</div>
 	  			<form class="form-search">
 	  				<input type="text" class="input-large search-query span9">
