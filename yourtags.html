@@ -27,7 +27,7 @@
 				$remove = $e.find($('.tag-remove'));
 				$remove.css('display', 'inline');
 
-				$e.removeClass('tag-clickable clear-both');
+				$e.removeClass('clear-both');
 			}
 
 			function removeTag(e) {
@@ -42,7 +42,7 @@
 			}
 
 			function loadTags() {
-				$('<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Japanese <span class="tag-remove" style="display:none"> | X </span></span>').appendTo('#existing-tags');
+				$('<span id ="japanese" class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Japanese  <button class="close tag-remove" style="display:none; margin-left: 5px; color: white;">&times;</button></span>').appendTo('#existing-tags');
 				}
 
 			function displayResults() {
@@ -59,7 +59,7 @@
 				   	var $rating_img_url = data.businesses[i].rating_img_url;
 				   	var $review_count = data.businesses[i].review_count;
 				   	var $url = data.businesses[i].url;
-				     $('#results').append('<a href="' + $url + '"> <div class="well well-small clearfix"> <div class="span3 pull-left"> <h3>' + $name + '</h3> <p> Neighborhoods: ' + $neighborhoods + '</p><p> Categories: ' + $categories + '</div><div class="span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <p>' + $display_phone + '</p><p>' + $address + '<br/></p>' + $city + '</div></div></a>')
+				     $('#results').append('<a href="' + $url + '"> <div class="well well-small clearfix result"> <div class="span3 pull-left"><h3>' + $name + '</h3> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p><b> Categories: </b>' + $categories + '</div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span4 pull-left"><h4> Your Tags </h4></div></div></a>')
 				   }, "json");
 			}
 		</script>
@@ -92,7 +92,7 @@
 			</div>
 			<div class="span10">
 				<!-- Main content for filtered businesses go here -->
-				<button type="submit" class="btn btn-warning pull-left" onclick="displayResults()">Display Results</button>
+				<button type="submit" class="btn btn-info pull-left" onclick="displayResults()">Display Results</button>
 	  			<div id="chosen-tags" class="span10 well well-small">
 				</div>
 	  			<form class="form-search">
