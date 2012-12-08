@@ -44,6 +44,24 @@
 			function loadTags() {
 				$('<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Japanese <span class="tag-remove" style="display:none"> | X </span></span>').appendTo('#existing-tags');
 				}
+
+			function displayResults() {
+				$.get("data.txt",
+				   function(data){
+				   	var i = 0;
+				   	var $name = data.businesses[i].name;
+				   	var $categories = data.businesses[i].categories;
+				   	var $display_phone = data.businesses[i].display_phone;
+				   	var $image_url = data.businesses[i].image_url;
+				   	var $address = data.businesses[i].location.address;
+				   	var $city = data.businesses[i].location.city;
+				   	var $neighborhoods = data.businesses[i].location.neighborhoods;
+				   	var $rating_img_url = data.businesses[i].rating_img_url;
+				   	var $review_count = data.businesses[i].review_count;
+				   	var $url = data.businesses[i].url;
+				     $('#results').append('<a href="' + $url + '"> <div class="well well-small clearfix"> <div class="span3 pull-left"> <h3>' + $name + '</h3> <p> Neighborhoods: ' + $neighborhoods + '</p><p> Categories: ' + $categories + '</div><div class="span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <p>' + $display_phone + '</p><p>' + $address + '<br/></p>' + $city + '</div></div></a>')
+				   }, "json");
+			}
 		</script>
 </head>
 <body onload="loadTags()">
@@ -74,51 +92,44 @@
 			</div>
 			<div class="span10">
 				<!-- Main content for filtered businesses go here -->
-				<button type="submit" class="btn btn-warning pull-left">Filter by</button>
+				<button type="submit" class="btn btn-warning pull-left" onclick="displayResults()">Display Results</button>
 	  			<div id="chosen-tags" class="span10 well well-small">
 				</div>
 	  			<form class="form-search">
 	  				<input type="text" class="input-large search-query span9">
 				</form>
-				<div>
-					<hr>
-						<h3> Filtered Results </h3>
-						<div class="well well-small clearfix"> 
-							<div class="span5 pull-left">
-								<h3> Joe's Pizza </h3>
-								<p> Categories: Italian Pizza </p>
-								<p> Neighborhoods: Upper West Side </p>
-							</div>
-							<div class="span5 pull-right">
-								<p> Your Tags </p>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-							</div>
-							<div class="clear-fix"> </div>
-						</div>
-						<div class="well well-small clearfix"> 
-							<div class="span3">
-								<h3> Chinese Place </h3>
-							</div>
-							<div class="span5 pull-right">
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-							</div>
-						</div>
-						<div class="well well-small clearfix"> 
-							<div class="span3">
-								<h3> Hillstone </h3>
-							</div>
-							<div class="span5 pull-right">
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-							</div>
+						<div>
+							<hr>
+								<h3> Filtered Results </h3>
+								<div id="results">
+									<div class="well well-small clearfix">
+										<!-- Filtered Results Start Here -->
+										<div class="span5 pull-left">
+											<h3> Joe's Pizza </h3>
+											<p> Categories: Italian Pizza </p>
+											<p> Neighborhoods: Upper West Side </p>
+										</div>
+										<div class="span5 pull-right">
+											<p> Your Tags </p>
+											<button type="submit" class="btn btn-info">Tag Name (x)</button>
+											<button type="submit" class="btn btn-info">Tag Name (x)</button>
+											<button type="submit" class="btn btn-info">Tag Name (x)</button>
+											<button type="submit" class="btn btn-info">Tag Name (x)</button>
+										</div>
+										<div class="clear-fix"> </div>
+									</div>
+								</div>
+								<!-- <div class="well well-small clearfix"> 
+									<div class="span3">
+										<h3> Hillstone </h3>
+									</div>
+									<div class="span5 pull-right">
+										<button type="submit" class="btn btn-info">Tag Name (x)</button>
+										<button type="submit" class="btn btn-info">Tag Name (x)</button>
+										<button type="submit" class="btn btn-info">Tag Name (x)</button>
+										<button type="submit" class="btn btn-info">Tag Name (x)</button>
+									</div>
+								-->
 						</div>
 					</hr>
 				</div>
