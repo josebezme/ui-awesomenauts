@@ -60,3 +60,36 @@
 .clear-both {
 	clear: both;
 }
+
+/* For the Your Tags pag */
+#results a, 
+#results a:visited, 
+#results a:active,
+#results a:hover 
+ {
+	text-decoration: none;
+	color: black;
+} 
+
+#results h3 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	color: #C41200;
+}
+
+#results .middle {
+	margin-top: 40px;
+}
+
+.result p {
+	margin-bottom: 5px;
+}
+
+.yelp-red {
+	color: #C41200
+}
+
+.close {
+	margin-bottom: 0px;
+	margin-top: 0px;
+}

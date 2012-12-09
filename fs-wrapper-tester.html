@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>UI Assignment 3</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+		<link href="styles.css" rel="stylesheet">
+		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<script src="js/tag-filter.js"></script>
+		<script src="js/fs-wrapper.js"></script>
+		<script src="js/yelp-wrapper.js"></script>
+		<script src="js/mustache.js"></script>
+		<script src="js/jquery_1.8.2.min.js"></script>
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+
+			var file = "1.txt";
+			function readFile() {
+				readFromFile(file, function(results) {
+					if(results) {
+						$('#results').text(results);
+					} else {
+						$('#results').text("No Results - " + new Date());
+					}	
+				});
+
+				return false;
+			}
+
+			function writeFile() {
+				$input = $('#input');
+				$results = $('#results');
+				$results.text("....");
+
+				if($input.val() == '') {
+					$results.text("Input something");
+				} else {
+					var r = writeToFile(
+							$input.val(), 
+							file, 
+							function(target) {
+						if(target.error) {
+							$results.text("Did not write it. :(");
+						} else {
+							$results.text("Wrote it!");
+						}	
+					});
+				}
+			}
+			
+		</script>
+	</head>
+	<body>
+		<br />
+		<br />
+		<div class="tag-assignment-wrapper">
+			<a href="#" class="button" onclick="return readFile();">Read File</a>
+			<a href="#" class="button" onclick="return writeFile();">Write to File</a>
+			<br/><br/>
+			<input type="text" id="input" style="font-size: 24pt;height: 30px;"/>
+			<div id="results" class="well">I'm a well.</div>
+		</div>
+	</body>
+</html>

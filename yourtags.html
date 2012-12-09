@@ -20,29 +20,72 @@
 			function addTag(e) {
 				var $e = $(e);
 
-				$e.off('click', 'addTag');
+				$e.attr('onclick', 'removeTag(this)');
 
 				$e.remove();
 				$e.appendTo($('#chosen-tags'));
 				$remove = $e.find($('.tag-remove'));
 				$remove.css('display', 'inline');
 
-				$e.removeClass('tag-clickable clear-both');
+				$e.removeClass('clear-both');
 			}
 
 			function removeTag(e) {
 				var $e = $(e);
-				$e.remove();
+
+				$e.attr('onclick', 'addTag(this)');
+				$e.addClass('tag-clickable clear-both');
+
 				$e.appendTo($('#existing-tags'));
 				$remove = $e.find($('.tag-remove'));
 				$remove.css('display', 'none');
-
-				$e.addClass('tag-clickable clear-both');
-				$e.on('click', addTag);
 			}
+
+			function loadTags() {
+				$('<span id ="japanese" class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Japanese  <button class="close tag-remove" style="display:none; margin-left: 5px; color: white;">&times;</button></span>').appendTo('#existing-tags');
+				}
+
+			function displayResults() {
+				$.get("data.txt",
+				   function(data){
+				   	var i = 0;
+				   	var $id = data.businesses[i].id;
+				   	var $name = data.businesses[i].name;
+				   	var $categories = data.businesses[i].categories;
+				   	var $display_phone = data.businesses[i].display_phone;
+				   	var $image_url = data.businesses[i].image_url;
+				   	var $address = data.businesses[i].location.address;
+				   	var $city = data.businesses[i].location.city;
+				   	var $neighborhoods = data.businesses[i].location.neighborhoods;
+				   	var $rating_img_url = data.businesses[i].rating_img_url;
+				   	var $review_count = data.businesses[i].review_count;
+				   	var $url = data.businesses[i].url;
+				   	var $tags = data.businesses[i].tags;
+				     $('#results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"> <div class="span3 pull-left"><h3>' + $name + '</h3> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span4 pull-left biz-tags"><h4> Your Tags </h4></div></div></a>');
+
+				     processTags($tags, $id);
+				     processCategories($categories, $id);
+				   }, "json");
+					
+				function processTags(e, id) {
+				var $e = $(e);
+				jQuery.each($e, function(i, val){
+						$("#" + id + " div.biz-tags").append('<span id="' + val + '" class="tag pull-left">' + val + ' </span>');
+				});
+				}
+
+				function processCategories(e, id) {
+				var $e = $(e);
+				jQuery.each($e, function(i, val){
+						$("#" + id + " p.categories").append(val[0] + ", ");
+				});
+				}
+			}
+
+			
 		</script>
 </head>
-<body>
+<body onload="loadTags()">
 	<div class="container">
 		<div>
 		    <ul class="nav nav-tabs">
@@ -58,73 +101,30 @@
 		  	</ul>
 		</div>
 		<div class="span11" style="text-align: center;"> 
-			<h1 style="color: red;"> Your Tags </h1>
+			<h1 class="yelp-red"> Your Tags </h1>
 		</div>
 		<div class="row-fluid">
 			<div class="well well-small span2">
 				<!-- Sidebar for tags -->
 				<h2> Tag List </h2>
 				<p> Click on tag to filter by that tag </p>
-					<div id ="existing-tags">
-						<span class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Japanese
-							<span class="tag-remove" onclick="removeTag($(this).parent('.tag'));" style="display:none;">|
-							<a href="#" onclick="alert('Remove');return false;">X</a>
-							</span>
-						</span>
+					<div id ="existing-tags" >
 					</div>
 			</div>
 			<div class="span10">
 				<!-- Main content for filtered businesses go here -->
-				<button type="submit" class="btn btn-warning pull-left">Filter by</button>
+				<button type="submit" class="btn btn-info pull-left" onclick="displayResults()">Display Results</button>
 	  			<div id="chosen-tags" class="span10 well well-small">
-	  				<span class="tag pull-left"> Pizza
-						<span class="tag-remove" onclick="removeTag($(this).parent('.tag'));" style="display:inline;">|
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-						</span>
-					</span>
 				</div>
 	  			<form class="form-search">
 	  				<input type="text" class="input-large search-query span9">
 				</form>
-				<div>
-					<hr>
-						<h3> Filtered Results </h3>
-						<div class="well well-small clearfix"> 
-							<div class="span5 pull-left">
-								<h3> Joe's Pizza </h3>
-								<p> Categories: Italian Pizza </p>
-								<p> Neighborhoods: Upper West Side </p>
-							</div>
-							<div class="span5 pull-right">
-								<p> Your Tags </p>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-							</div>
-							<div class="clear-fix"> </div>
-						</div>
-						<div class="well well-small clearfix"> 
-							<div class="span3">
-								<h3> Chinese Place </h3>
-							</div>
-							<div class="span5 pull-right">
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-							</div>
-						</div>
-						<div class="well well-small clearfix"> 
-							<div class="span3">
-								<h3> Hillstone </h3>
-							</div>
-							<div class="span5 pull-right">
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-								<button type="submit" class="btn btn-info">Tag Name (x)</button>
-							</div>
+						<div>
+							<hr>
+								<h3> Filtered Results </h3>
+								<div id="results">
+										<!-- Filtered Results Start Here -->
+								</div>
 						</div>
 					</hr>
 				</div>
