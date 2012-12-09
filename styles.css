@@ -61,7 +61,12 @@
 	clear: both;
 }
 
-/* For the Your Tags pag */
+/* For the Your Tags page */
+
+#existing-tags-container {
+	min-height: 500px;
+}
+
 #results a, 
 #results a:visited, 
 #results a:active,
@@ -70,6 +75,10 @@
 	text-decoration: none;
 	color: black;
 } 
+
+#results a:hover {
+	background: black;
+}
 
 #results h3 {
 	margin-top: 0px;
