@@ -21,8 +21,8 @@ var accessor = {
  * The Main function
  * Takes a query a zip and a 
  */
-function searchAndDo(query, zip, fun){
-	var parameters = getParameters( query, zip );
+function searchAndDo(query, zip, offset, fun, catagories){
+	var parameters = getParameters( query, zip, offset, catagories );
 	var message = { 
 		'action': 'http://api.yelp.com/v2/search',
 		'method': 'GET',
@@ -56,10 +56,13 @@ function searchAndDo(query, zip, fun){
 /*
  * Create the parameters to call Yelp with
  */
-function getParameters( query, zip ){
+function getParameters( query, zip, offset, cata ){
 	var para = [];
 	para.push(['term', query]);
 	para.push(['location', zip]);
+	para.push(['offset', offset]);
+	if (typeof(cata) != 'undefined' && cata.length > 2)
+		para.push(['category_filter', cata]);
 	para.push(['callback', 'cb']);
 	para.push(['oauth_consumer_key', auth.consumerKey]);
 	para.push(['oauth_consumer_secret', auth.consumerSecret]);
