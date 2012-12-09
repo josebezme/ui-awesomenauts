@@ -1,46 +1,107 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <title>Yelp Home-Page</title>
     <!-- Bootstrap -->
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>   
-  	
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="styles.css" rel="stylesheet" />
+    <link href="bootstrap/css/style.css?a1" rel="stylesheet" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="scripts/jquery.placeholder.min.js" type="text/javascript"></script>
+    <script src="scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/tag-filter.js"></script>
+    <script src="js/fs-wrapper.js"></script>
+    <script src="js/yelp-wrapper.js"></script>
+    <script src="js/mustache.js"></script>
+    <script src="js/jquery_1.8.2.min.js"></script>
+    <script type="text/javascript">
+      function hideHero() {
+        $(".hero-unit").hide();
+      }
+
+      function searchResults() {
+        $.get("data.txt",
+           function(data){
+            var i = 0;
+            var $id = data.businesses[i].id;
+            var $name = data.businesses[i].name;
+            var $categories = data.businesses[i].categories;
+            var $display_phone = data.businesses[i].display_phone;
+            var $image_url = data.businesses[i].image_url;
+            var $address = data.businesses[i].location.address;
+            var $city = data.businesses[i].location.city;
+            var $neighborhoods = data.businesses[i].location.neighborhoods;
+            var $rating_img_url = data.businesses[i].rating_img_url;
+            var $review_count = data.businesses[i].review_count;
+            var $url = data.businesses[i].url;
+            var $tags = data.businesses[i].tags;
+            $("#search-results").empty();
+            $('#search-results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"> <div class="span3 pull-left"><h3>' + $name + '</h3> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span4 pull-left biz-tags"><h4> Your Tags </h4></div></div></a>');
+
+             processTags($tags, $id);
+             processCategories($categories, $id);
+           }, "json");
+          
+        function processTags(e, id) {
+        var $e = $(e);
+        jQuery.each($e, function(i, val){
+            $("#" + id + " div.biz-tags").append('<span id="' + val + '" class="tag pull-left">' + val + ' </span>');
+        });
+        }
+
+        function processCategories(e, id) {
+        var $e = $(e);
+        jQuery.each($e, function(i, val){
+            $("#" + id + " p.categories").append(val[0] + ", ");
+        });
+        }
+      }
+    </script> 
    
   </head>
    <body>
-    <div class="container clearfix">
+    <div class="container">
+      <!-- Navbar and Search Bar -->
       <div>
-      <ul class="nav nav-tabs">
-  	  <li class="active">
-  	    <a href="search-results.html">Home</a>
-  	  </li>
-  	  <li>
-        <a href="tag-assignment-wrapper.html">Your Tags</a>
-      </li>
-  	  <li>  
-        <form class="form-search">
-          <input type="text" class="input-medium span8 search-query">
-          <button type="submit" class="btn btn-primary">Search for places</button>
-      </form>
-      </li>
-    </ul>
-  </div>
-    <div class="hero-unit dl-horizontal clearfix">
-    <img src="bootstrap/img/yelp logo.png" class="img-small pull-right">
-    <h1 class="pull-up">Yelp</h1>
-    <div class="pull-down">Yelp is the best way to find great local bussiness</div>
-  </div>
+        <ul class="nav nav-tabs">
+      	  <li class="active">
+      	    <a href="search-results.html">Home</a>
+      	  </li>
+      	  <li>
+            <a href="tag-assignment-wrapper.html">Your Tags</a>
+          </li>
+          <li>
+            <div id="search-bar">
+              <form class="form-search search-bar">
+                <input type="text" class="input-large span6 search-query" placeholder="search for (e.g. Mexican, Joe's Pizza, cheap)">
+                <input type="text" class="input-large span2 search-query" placeholder="Location">
+                <button type="submit" class="btn btn-primary pull-right" style="margin-left: 10px;" onclick="searchResults()">Search for places</button>
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Hero Unit -->
+      <div class="hero-unit dl-horizontal clearfix" style="display: none;">
+        <img src="bootstrap/img/yelp logo.png" class="img-small pull-right">
+        <h1 class="pull-up">Yelp</h1>
+        <div class="pull-down">Yelp is the best way to find great local business</div>
+      </div>
 
-    
-    <div class="well">
-          <div class="pull-left"> Koronet </div>
-          <button class="pull-right btn btn-info "> Tag it </button>
-    </div>
-    <div class="well">
-         <div class="pull-left"> Community </div>
-         <button class="pull-right btn btn-info "> Tag it </button>
-  </div>
-</div> 
+      <!-- Search Results -->
+      <div id="search-results">
+        <div class="well">
+              <div class="pull-left"> Koronet </div>
+              <button class="pull-right btn btn-info "> Tag it </button>
+        </div>
+        <div class="well">
+             <div class="pull-left"> Community </div>
+             <button class="pull-right btn btn-info "> Tag it </button>
+        </div>
+      </div>
+    </div> 
   </body>
 </html>
