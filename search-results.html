@@ -2,27 +2,45 @@
   <head>
     <title>Yelp Home-Page</title>
     <!-- Bootstrap -->
-    
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>   
   	
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
    
   </head>
    <body>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-  	<script src="http://code.jquery.com/jquery-latest.js"></script>
-    <div>
-    <ul class="nav nav-tabs">
-	  <li class="active">
-	    <a href="search-results.html">Home</a>
-	  </li>
-	  <li>
-      <a href="tag-assignment-wrapper.html">Your Tags</a>
-    </li>
-	  <li><a href="#">...</a></li>
-  </ul>
-</div>
-   <form class="navbar-search pull-left">
-  <input type="text" class="search-query" placeholder="Search">
-</form>
+    <div class="container clearfix">
+      <div>
+      <ul class="nav nav-tabs">
+  	  <li class="active">
+  	    <a href="search-results.html">Home</a>
+  	  </li>
+  	  <li>
+        <a href="tag-assignment-wrapper.html">Your Tags</a>
+      </li>
+  	  <li>  
+        <form class="form-search">
+          <input type="text" class="input-medium span8 search-query">
+          <button type="submit" class="btn btn-primary">Search for places</button>
+      </form>
+      </li>
+    </ul>
+  </div>
+    <div class="hero-unit dl-horizontal clearfix">
+    <img src="bootstrap/img/yelp logo.png" class="img-small pull-right">
+    <h1 class="pull-up">Yelp</h1>
+    <div class="pull-down">Yelp is the best way to find great local bussiness</div>
+  </div>
+
+    
+    <div class="well">
+          <div class="pull-left"> Koronet </div>
+          <button class="pull-right btn btn-info "> Tag it </button>
+    </div>
+    <div class="well">
+         <div class="pull-left"> Community </div>
+         <button class="pull-right btn btn-info "> Tag it </button>
+  </div>
+</div> 
   </body>
 </html>
