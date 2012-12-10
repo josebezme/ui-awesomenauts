@@ -1,3 +1,13 @@
+/* General Styling */
+#body-wrapper {
+	margin-top: 15px;
+}
+
+clear-right {
+	clear: right;
+}
+
+
 /* Search Results styling */
 
 .search-bar {
