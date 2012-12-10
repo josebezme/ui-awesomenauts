@@ -4,6 +4,8 @@
 	margin: 5px 0px 5px 0px;
 }
 
+/* Tag Styling */
+
 .tag-assignment-wrapper {
 	background: #fff;
 	padding: 5px 20px 20px;
@@ -93,7 +95,7 @@
 }
 
 #results .middle {
-	margin-top: 40px;
+	margin-top: 10px;
 }
 
 .result p {
