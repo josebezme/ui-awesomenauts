@@ -22,10 +22,11 @@
       }
 
       function searchResults() {
-        //$("#search-results").append('<div> hello </div>');
-        $.get("data.txt",
-           function(data){
-            var i = 0;
+        $.get("data2.txt", 
+          function(data){
+            $("#results").empty();
+            var $numResults = data.businesses.length;
+            for (i = 0; i < $numResults; i++) {
             var $id = data.businesses[i].id;
             var $name = data.businesses[i].name;
             var $categories = data.businesses[i].categories;
@@ -38,26 +39,25 @@
             var $review_count = data.businesses[i].review_count;
             var $url = data.businesses[i].url;
             var $tags = data.businesses[i].tags;
-            $("#results").empty();
-            $('#results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div><div class="span4 pull-left"><h3>' + $name + '</h3> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span2 pull-right"><button class="pull-right btn btn-large btn-success"> Tag It! </button></div></div></a>');
+              $('#results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div><div class="span4 pull-left"><h3>' + $name + '</h3> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span2 pull-right"><button class="pull-right btn btn-large btn-success"> Tag It! </button></div></div></a>');
 
-             processTags($tags, $id);
-             processCategories($categories, $id);
-           }, "json");
-          
-        function processTags(e, id) {
-        var $e = $(e);
-        jQuery.each($e, function(i, val){
-            $("#" + id + " div.biz-tags").append('<span id="' + val + '" class="tag pull-left">' + val + ' </span>');
-        });
-        }
+               processTags($tags, $id);
+               processCategories($categories, $id);
+             }}, "json");
+            
+          function processTags(e, id) {
+          var $e = $(e);
+          jQuery.each($e, function(i, val){
+              $("#" + id + " div.biz-tags").append('<span id="' + val + '" class="tag pull-left">' + val + ' </span>');
+          });
+          }
 
-        function processCategories(e, id) {
-        var $e = $(e);
-        jQuery.each($e, function(i, val){
-            $("#" + id + " p.categories").append(val[0] + ", ");
-        });
-        }
+          function processCategories(e, id) {
+          var $e = $(e);
+          jQuery.each($e, function(i, val){
+              $("#" + id + " p.categories").append(val[0] + ", ");
+          });
+          }
       }
     </script> 
    
