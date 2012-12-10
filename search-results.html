@@ -58,7 +58,7 @@
                 var $url = data.businesses[i].url;
                 var $tags = data.businesses[i].tags;
                 
-                $('#results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div><div class="span4 pull-left"><h3>' + $name + '</h3> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span2 pull-right"><button class="pull-right btn btn-large btn-success"> Tag It! </button></div></div></a>');
+                $('#results').append('<div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div><div class="span4 pull-left"><a href="' + $url + '"><h3>' + $name + '</h3></a> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span2 pull-right"><button class="pull-right btn btn-large btn-success"> Tag It! </button></div></div>');
 
                processTags($tags, $id);
                processCategories($categories, $id);
@@ -77,47 +77,49 @@
    
   </head>
    <body>
-    <div class="container">
-      <!-- Navbar and Search Bar -->
-      <div>
-        <ul class="nav nav-tabs">
-      	  <li class="active">
-      	    <a href="search-results.html">Home</a>
-      	  </li>
-      	  <li>
-            <a href="tag-assignment-wrapper.html">Your Tags</a>
-          </li>
-          <li>
-            <!-- Search Bar -->
-            <div id="search-bar">
-<!--              <form class="form-search search-bar"> -->
-                <input type="text" id="query" class="input-large span6 search-query" placeholder="search for (e.g. Mexican, Joe's Pizza, cheap)">
-                <input type="text" id="zip" class="input-large span2 search-query" placeholder="Location">
-                <button type="button" class="btn btn-primary pull-right" style="margin-left: 10px;" onclick="searchResults()">Search for places</button>
-<!--              </form>
-              <button type="button" class="btn btn-primary pull-right" style="margin-left: 10px;" onclick="searchResults()">Search for places</button> -->
-            </div>
-          </li>
-        </ul>
-      </div>
-      
-      <!-- Hero Unit -->
-      <div class="hero-unit dl-horizontal clearfix" style="display: none;">
-        <img src="bootstrap/img/yelp logo.png" class="img-small pull-right">
-        <h1 class="pull-up">Yelp</h1>
-        <div class="pull-down">Yelp is the best way to find great local business</div>
-      </div>
-
-      <!-- Search Results -->
-      <div id="results" >
-<!--         <div class="well">
-              <div class="pull-left"> Koronet </div>
-              <button class="pull-right btn btn-info "> Tag it </button>
+    <div id="body-wrapper">
+      <div class="container">
+        <!-- Navbar and Search Bar -->
+        <div>
+          <ul class="nav nav-tabs">
+        	  <li class="active">
+        	    <a href="search-results.html">Home</a>
+        	  </li>
+        	  <li>
+              <a href="tag-assignment-wrapper.html">Your Tags</a>
+            </li>
+            <li>
+              <!-- Search Bar -->
+              <div id="search-bar">
+  <!--              <form class="form-search search-bar"> -->
+                  <input type="text" id="query" class="input-large span6 search-query" placeholder="search for (e.g. Mexican, Joe's Pizza, cheap)">
+                  <input type="text" id="zip" class="input-large span2 search-query" placeholder="Location">
+                  <button type="button" class="btn btn-primary pull-right" style="margin-left: 10px;" onclick="searchResults()">Search for places</button>
+  <!--              </form>
+                <button type="button" class="btn btn-primary pull-right" style="margin-left: 10px;" onclick="searchResults()">Search for places</button> -->
+              </div>
+            </li>
+          </ul>
         </div>
-        <div class="well">
-             <div class="pull-left"> Community </div>
-             <button class="pull-right btn btn-info "> Tag it </button>
-        </div> -->
+        
+        <!-- Hero Unit -->
+        <div class="hero-unit dl-horizontal clearfix" style="display: none;">
+          <img src="bootstrap/img/yelp logo.png" class="img-small pull-right">
+          <h1 class="pull-up">Yelp</h1>
+          <div class="pull-down">Yelp is the best way to find great local business</div>
+        </div>
+
+        <!-- Search Results -->
+        <div id="results" >
+  <!--         <div class="well">
+                <div class="pull-left"> Koronet </div>
+                <button class="pull-right btn btn-info "> Tag it </button>
+          </div>
+          <div class="well">
+               <div class="pull-left"> Community </div>
+               <button class="pull-right btn btn-info "> Tag it </button>
+          </div> -->
+        </div>
       </div>
     </div> 
   </body>
