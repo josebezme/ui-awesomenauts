@@ -22,6 +22,7 @@
       }
 
       function searchResults() {
+        //$("#search-results").append('<div> hello </div>');
         $.get("data.txt",
            function(data){
             var i = 0;
@@ -37,8 +38,8 @@
             var $review_count = data.businesses[i].review_count;
             var $url = data.businesses[i].url;
             var $tags = data.businesses[i].tags;
-            $("#search-results").empty();
-            $('#search-results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"> <div class="span3 pull-left"><h3>' + $name + '</h3> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span4 pull-left biz-tags"><h4> Your Tags </h4></div></div></a>');
+            $("#results").empty();
+            $('#results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div><div class="span4 pull-left"><h3>' + $name + '</h3> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span2 pull-right"><button class="pull-right btn btn-large btn-success"> Tag It! </button></div></div></a>');
 
              processTags($tags, $id);
              processCategories($categories, $id);
@@ -73,12 +74,14 @@
             <a href="tag-assignment-wrapper.html">Your Tags</a>
           </li>
           <li>
+            <!-- Search Bar -->
             <div id="search-bar">
               <form class="form-search search-bar">
                 <input type="text" class="input-large span6 search-query" placeholder="search for (e.g. Mexican, Joe's Pizza, cheap)">
                 <input type="text" class="input-large span2 search-query" placeholder="Location">
                 <button type="submit" class="btn btn-primary pull-right" style="margin-left: 10px;" onclick="searchResults()">Search for places</button>
               </form>
+              <button type="submit" class="btn btn-primary pull-right" style="margin-left: 10px;" onclick="searchResults()">Search for places</button>
             </div>
           </li>
         </ul>
@@ -92,7 +95,7 @@
       </div>
 
       <!-- Search Results -->
-      <div id="search-results">
+      <div id="results">
         <div class="well">
               <div class="pull-left"> Koronet </div>
               <button class="pull-right btn btn-info "> Tag it </button>
