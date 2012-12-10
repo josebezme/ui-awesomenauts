@@ -1,0 +1,8 @@
+{
+  "businesses": [
+    {
+      "tags": ["cheap", "chinese", "saw on tv", "saw on movie", "to try", "tried", "expensive", "italian"
+      ]
+    }
+  ]
+}

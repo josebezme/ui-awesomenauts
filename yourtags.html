@@ -40,9 +40,16 @@
 				$remove.css('display', 'none');
 			}
 
-			function loadTags() {
-				$('<span id ="japanese" class="tag tag-clickable clear-both pull-left" onclick="addTag(this);"> Japanese  <button class="close tag-remove" style="display:none; margin-left: 5px; color: white;">&times;</button></span>').appendTo('#existing-tags');
-				}
+			function loadExistingTags() {
+				$.get("existing-tags.txt", 
+					function(data){
+					var i = 0;
+					var $tags = data.businesses[i].tags; 
+				   	jQuery.each($tags, function(i, val) {
+				   		$('#existing-tags').append('<span id ="' + val + '" class="tag tag-clickable clear-both pull-left" onclick="addTag(this);">' + val + '<button class="close tag-remove" style="display:none; color: white;">&times;</button></span>');
+				   	});
+				   }, "json");
+			}
 
 			function displayResults() {
 				$.get("data.txt", 
@@ -83,7 +90,7 @@
 			}
 		</script>
 </head>
-<body onload="loadTags()">
+<body onload="loadExistingTags()">
 	<div id="body-wrapper">
 		<div class="container">
 			<!-- Navbar and Search Bar -->
