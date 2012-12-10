@@ -17,6 +17,7 @@
 		<script type="text/javascript">
 
 			function addTag(e) {
+				// Adds the tag e to div#chosen-tags and removes it from the div#existing-tags.
 				var $e = $(e);
 
 				$e.attr('onclick', 'removeTag(this)');
@@ -27,9 +28,11 @@
 				$remove.css('display', 'inline');
 
 				$e.removeClass('clear-both');
+				//	$("#tag-list").val($('#tag-list').val() + '"' + $e.attr("id") + '"'); 
 			}
 
 			function removeTag(e) {
+				// Removes the tag e from div#chosen-tags and adds it back to div#existing-tags. 
 				var $e = $(e);
 
 				$e.attr('onclick', 'addTag(this)');
@@ -40,8 +43,9 @@
 				$remove.css('display', 'none');
 			}
 
-			function loadExistingTags() {
-				$.get("existing-tags.txt", 
+			function loadExistingTags(file) {
+				// Pulls user's existing tags from file and displays them in the div#existing-tags as clickable tags. 
+				$.get(file, 
 					function(data){
 					var i = 0;
 					var $tags = data.businesses[i].tags; 
@@ -51,8 +55,18 @@
 				   }, "json");
 			}
 
-			function displayResults() {
-				$.get("data.txt", 
+			function getChosenTags() {
+				// Puts all selected tags into the #tag-list search form. File System API will use this list of tags to retrieve businesses. 
+
+				$("#tag-list").val("");
+				$("#chosen-tags span").each(function(index) {
+					$("#tag-list").val($('#tag-list').val() + ' "' + $(this).attr("id") + '"');
+				})
+			}
+
+			function displayResults(file) {
+					getChosenTags();
+				$.get(file, 
 					function(data){
 				   	var i = 0;
 				   	var $id = data.businesses[i].id;
@@ -63,12 +77,13 @@
 				   	var $address = data.businesses[i].location.address;
 				   	var $city = data.businesses[i].location.city;
 				   	var $neighborhoods = data.businesses[i].location.neighborhoods;
+				   	if(typeof($neighborhoods) == 'undefined') $neighborhoods = '';
 				   	var $rating_img_url = data.businesses[i].rating_img_url;
 				   	var $review_count = data.businesses[i].review_count;
 				   	var $url = data.businesses[i].url;
 				   	var $tags = data.businesses[i].tags;
 				   	$("#results").empty();
-				    $('#results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"> <div class="span3 pull-left"><h3>' + $name + '</h3> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span4 pull-left biz-tags"><h4> Your Tags </h4></div></div></a>');
+				    $('#results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div> <div class="span3 pull-left"><h4 class="yelp-red">' + $name + '</h4> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span4 pull-left biz-tags"><h4> Your Tags </h4></div></div></a>');
 
 				     processTags($tags, $id);
 				     processCategories($categories, $id);
@@ -90,7 +105,7 @@
 			}
 		</script>
 </head>
-<body onload="loadExistingTags()">
+<body onload="loadExistingTags('existing-tags.txt')">
 	<div id="body-wrapper">
 		<div class="container">
 			<!-- Navbar and Search Bar -->
@@ -114,12 +129,10 @@
 				</div>
 				<div class="span10">
 					<!-- Main content for filtered businesses go here -->
-					<button type="submit" class="btn btn-info pull-left" onclick="displayResults()"> Filter </button>
+					<button type="submit" class="btn btn-info pull-left" onclick="displayResults('real-data.txt')"> Filter </button>
 		  			<div id="chosen-tags" class="span10 well well-small pull-left clear-right">
 					</div>
-		  			<!-- <form class="form-search">
-		  				<input type="text" class="input-large search-query span9">
-					</form> -->
+					<input type="text" id="tag-list" class="input-large span12 search-query" placeholder="tags">
 					<div>
 						<h3> Filtered Results </h3>
 						<hr style="margin-top: 5px;">
