@@ -58,7 +58,7 @@
                 var $url = data.businesses[i].url;
                 var $tags = data.businesses[i].tags;
                 
-                $('#results').append('<div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div><div class="span4 pull-left"><a href="' + $url + '"><h3>' + $name + '</h3></a> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span2 pull-right"><button class="pull-right btn btn-large btn-success"> Tag It! </button></div></div>');
+                $('#results').append('<div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div><div class="span4 pull-left"><a href="' + $url + '"><h4>' + $name + '</h4></a> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + '</address></div><div class="span2 pull-right"><button class="pull-right btn btn-large btn-success"> Tag It! </button></div></div>');
 
                processTags($tags, $id);
                processCategories($categories, $id);
@@ -86,7 +86,7 @@
         	    <a href="search-results.html">Home</a>
         	  </li>
         	  <li>
-              <a href="tag-assignment-wrapper.html">Your Tags</a>
+              <a href="yourtags.html">Your Tags</a>
             </li>
             <li>
               <!-- Search Bar -->
