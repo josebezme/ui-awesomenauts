@@ -111,6 +111,11 @@ function tagIt_loadExistingTags() {
 	});
 }
 
+function is_string(input){
+	return typeof(input)=='string';
+}
+
+
 function tagIt_isExistingTag(tag) {
 	for(var i = 0; i < tagIt_tags.length; i++) {
 		if(tagIt_tags[i] == tag) {

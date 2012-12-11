@@ -23,7 +23,7 @@
 		    		</h4> 
 		    	</div>
 		    	<div class="middle span3 pull-left"> 
-		    		<img src="{{yelp_obj.rating_img_url}}"> 14 reviews 
+		    		<img src="{{yelp_obj.rating_img_url}}"> {{yelp_obj.review_count}} reviews 
 		    		<address>{{yelp_obj.display_phone}}</address>
 		    	</div>
 		    	<div class="span5 pull-left biz-tags" style="overflow: wrap;line-height: 200%;">
@@ -45,6 +45,11 @@
 
 			function addTag(e) {
 				// Adds the tag e to div#chosen-tags and removes it from the div#existing-tags.
+
+				if(is_string(e)) {
+					e.replace(" ", "_");
+				}
+
 				var $e = $(e);
 
 				$e.attr('onclick', '').unbind('click');
@@ -69,10 +74,10 @@
 				$tag.addClass('clear-both');
 				$tag.addClass('tag-clickable');
 
-				var id = $tag.attr('id');
+				var el = $tag.get();
 				var delayed = function() {
 					$tag.bind('click', function() {
-						addTag('#' + id);
+						addTag(el);
 					});
 				}
 
