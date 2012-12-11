@@ -26,7 +26,27 @@ function getTags(obj) {
 
 function readFromFile(file, callback) {
   globalFS.root.getFile(file, {}, function(fileEntry) {
-    fileEntry.file(function(file) {
+    readFromFileEntry(fileEntry, function(result) {
+      callback(result);
+    });
+  }, errorHandler);
+}
+
+function fileExists(file, callback) {
+  globalFS.root.getFile(file, {}, function(fileEntry) {
+    callback(true);
+  }, 
+    function(err) {
+      if(err.code == FileError.NOT_FOUND_ERR) {
+        callback(false);
+      } else {
+        errorHandler(err);
+      }
+  });
+}
+
+function readFromFileEntry(fileEntry, callback) {
+  fileEntry.file(function(file) {
 
       var reader = new FileReader();
 
@@ -40,19 +60,69 @@ function readFromFile(file, callback) {
 
       reader.readAsText(file);
     }, errorHandler);
-  }, errorHandler)
 }
 
-function fileExists(file, callback) {
-  globalFS.root.getFile(file, {}, function(fileEntry) {
-    callback(true);
-  }, 
-    function(err) {
-      if(err.code == FileError.NOT_FOUND_ERR) {
-        callback(false);
-      } else {
-        errorHandler(err);
+function readFromFileEntries(fileEntries, results, callback) {
+  if(!fileEntries.length) {
+    callback(results);
+  } else {
+    readFromFileEntry(fileEntries[0], function(result) {
+      var obj = JSON.parse(result);
+      results.push(obj);
+
+      readFromFileEntries(fileEntries.slice(1), results, callback);
+    });
+  }
+
+}
+
+function getTaggedObjects(cb) {
+  globalFS.root.getDirectory(tagFolder, {create: true}, function(dirEntry) {
+    var fileEntries = [];
+    var dirReader = dirEntry.createReader();
+    
+    var readEntries = function() {
+      dirReader.readEntries(function(entries) {
+        if(!entries.length) {
+          readFromFileEntries(fileEntries, [], function(result) {
+            cb(result);
+          });
+        } else {
+          for(var i = 0; i < entries.length; i++) {
+            var entry = entries[i];
+            fileEntries.push(entry);
+          }
+          readEntries();
+        }
+      });
+    }
+
+    readEntries();
+  });
+}
+
+function getTags(cb) {
+  var tagSet = {};
+  var tags = [];
+  getTaggedObjects(function(results) {
+    for(var i = 0; i < results.length; i++) {
+      var obj = results[i];
+      for(var j = 0; j < obj.tags.length; j++) {
+        var tag = obj.tags[j];
+
+        if(tag in tagSet) {
+          //Nothing
+        } else {
+          tagSet[tag] = true;
+        }
       }
+    }
+
+    for(key in tagSet) {
+      tags.push(key);
+    }
+
+    cb(tags);
   });
 }
 
