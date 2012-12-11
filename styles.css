@@ -7,6 +7,18 @@ clear-right {
 	clear: right;
 }
 
+/* lightbox */
+
+div.screen{
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    opacity:0.4;
+    background-color: black;
+    z-index: 5;
+}
 
 /* Search Results styling */
 
@@ -17,10 +29,16 @@ clear-right {
 /* Tag Styling */
 
 .tag-assignment-wrapper {
+    position: fixed;
 	background: #fff;
 	padding: 5px 20px 20px;
 	width: 600px;
-	margin: auto;
+	
+	left: 50%;
+	top: 40px;
+	margin-left: -300px;
+	background-color: white;
+	z-index: 10;
 }
 
 .tag-container {
