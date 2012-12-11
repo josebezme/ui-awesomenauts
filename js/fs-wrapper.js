@@ -20,6 +20,10 @@ function createDir(dir, folders) {
   }, errorHandler);
 };
 
+function getTags(obj) {
+
+}
+
 function readFromFile(file, callback) {
   globalFS.root.getFile(file, {}, function(fileEntry) {
     fileEntry.file(function(file) {
@@ -37,6 +41,48 @@ function readFromFile(file, callback) {
       reader.readAsText(file);
     }, errorHandler);
   }, errorHandler)
+}
+
+function fileExists(file, callback) {
+  globalFS.root.getFile(file, {}, function(fileEntry) {
+    callback(true);
+  }, 
+    function(err) {
+      if(err.code == FileError.NOT_FOUND_ERR) {
+        callback(false);
+      } else {
+        errorHandler(err);
+      }
+  });
+}
+
+function getTagsForId(id, cb) {
+  var file = tagFolder + id + ".txt";
+  fileExists(file, function(exists) {
+    if(exists) {
+      readFromFile(file, function(result) {
+        if(result) {
+          var obj = JSON.parse(result);
+          cb(obj.tags);
+        }
+      });
+    } else {
+      cb([]);
+    }
+
+  });
+}
+
+function updateTags(obj, cb) {
+  var file = tagFolder + obj.yelp_obj.id + ".txt";
+  writeToFile(JSON.stringify(obj), file, function(e) {
+    if(!e.error) {
+      cb(true);
+    } else {
+      cb(false);
+      errorHandler(e.target.error);
+    }
+  });
 }
 
 function writeToFile(data, file, callback) {
@@ -58,10 +104,10 @@ function writeToFile(data, file, callback) {
 }
 
 
-var path = 'ui-assignment/objects/';
+var tagFolder = "tags/";
 
 function initFS(fs){
-  // createDir(fs.root, path.split('/'));
+  createDir(fs.root, tagFolder.split('/'));
   globalFS = fs;
 }
 

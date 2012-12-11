@@ -1,6 +1,6 @@
 [
   {
-    "yelp-obj": {
+    "yelp_obj": {
       "categories": [
         [
           "Local Flavor",
@@ -43,8 +43,6 @@
       "mobile_url": "http://m.yelp.com/biz/4kMBvIEWPxWkWKFN__8SxQ",
       "name": "Yelp",
       "phone": "4159083801",
-      "tags": ["cheap", "chinese", "saw on tv"
-      ],
       "rating_img_url": "http://media1.ak.yelpcdn.com/static/201012161694360749/img/ico/stars/stars_3.png",
       "rating_img_url_large": "http://media3.ak.yelpcdn.com/static/201012161053250406/img/ico/stars/stars_large_3.png",
       "rating_img_url_small": "http://media1.ak.yelpcdn.com/static/201012162337205794/img/ico/stars/stars_small_3.png",
