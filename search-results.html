@@ -13,7 +13,6 @@
     <script src="scripts/bootstrap.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
-    <script src="js/tag-filter.js"></script>
     <script src="js/fs-wrapper.js"></script>
     <script src="js/yelp-wrapper.js"></script>
     <script src="js/mustache.js"></script>
@@ -56,20 +55,6 @@
         $(".hero-unit").hide();
         $("#results").empty();
       }
-      
-          function processTags(e, id) {
-              var $e = $(e);
-              jQuery.each($e, function(i, val){
-                  $("#" + id + " div.biz-tags").append('<span id="' + val + '" class="tag pull-left">' + val + ' </span>');
-              });
-          }
-
-          function processCategories(e, id) {
-              var $e = $(e);
-              jQuery.each($e, function(i, val){
-                  $("#" + id + " p.categories").append(val[0] + ", ");
-              });
-          }
 
       function showMessageBadQuery(){
         document.getElementById('bad-input').style.display = 'block';
@@ -80,8 +65,8 @@
         document.getElementById('searching').style.display = 'none';
       }
 
-
       var activeResults;
+      // Search the results with the given offset.
       function searchResults(numberofresults) {
 
           document.getElementById('bad-input').style.display = 'none';
@@ -137,10 +122,12 @@
         return false;
       }
 
+      // Callback used after editing tags for an item.
       var submitCallback = function() {
         redrawResults(activeResults);
       }
 
+      // Redraw the results given an array of objects.
       function redrawResults(objects) {
 
         var buildTags = function(results, objects, cb, idx) {
@@ -156,7 +143,6 @@
         }
 
         // Build new objects array.
-
         var newObjects = [];
         for(var i = 0; i < objects.length; i++) {
           newObjects.push(objects[i]);

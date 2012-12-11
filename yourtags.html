@@ -7,7 +7,6 @@
 	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<link href="styles.css" rel="stylesheet" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="js/tag-filter.js"></script>
     <script src="js/yelp-wrapper.js"></script>
     <script src="js/mustache.js"></script>
     <script src="js/tag_assignment.js"></script>
@@ -43,6 +42,7 @@
     </script>
 		<script type="text/javascript">
 
+			// Adds a filter tag to the filter div.
 			function addTag(e) {
 				// Adds the tag e to div#chosen-tags and removes it from the div#existing-tags.
 
@@ -65,6 +65,7 @@
 				displayResults();
 			}
 
+			// Removes a filter tag from the filter div.
 			function removeFilterTag(e) {
 				$e = $(e);
 				$tag = $e.parent();
@@ -85,6 +86,7 @@
 				displayResults();
 			}
 
+			// Removes a tag from a business by id.
 			function removeTagFromId(e, tag, id) {
 				// Removes the tag e from div#chosen-tags and adds it back to div#existing-tags. 
 				var $e = $(e);
@@ -107,6 +109,8 @@
 				return false;
 			}
 
+			// Loads existing tags into the
+			// existing tag view
 			function loadExistingTags(tags) {
 				// Pulls user's existing tags from file and displays them in the div#existing-tags as clickable tags. 
 				tags.sort();
@@ -120,6 +124,8 @@
 			   	}
 			}
 
+			// Gets the tag values from the filter
+			// for a search.
 			function getFilterTags() {
 				// Puts all selected tags into the #tag-list search form. File System API will use this list of tags to retrieve businesses. 
 
@@ -132,6 +138,8 @@
 				return tags;
 			}
 
+			// Starts the tagit modules
+			// with the given object id.
 			function editObject(id) {
 				var object = getObjectById(id);
 				startTagItWithObject(object);
@@ -148,6 +156,8 @@
 			}
 
 			var resultObjects;
+			// Displays the results
+			// and filters then if needed.
 			function displayResults() {
 				var tags = getFilterTags();
 				getTaggedObjects(function(objs) {
@@ -180,6 +190,8 @@
 				   });
 			}
 
+			// Callback for when we're done editing tags
+			// on an object in the tag assignment dialogue.
 			var submitCallback = function() {
 				displayResults();
 			}
@@ -193,6 +205,7 @@
 					displayResults();
 				}
 
+				// Delay while fileapi is loading.
 				setTimeout(delayed, 500);
 				
 			});

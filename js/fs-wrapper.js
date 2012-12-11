@@ -24,6 +24,8 @@ function getTags(obj) {
 
 }
 
+
+// Inner function to read from a file and return the result to the callback.
 function readFromFile(file, callback) {
   globalFS.root.getFile(file, {}, function(fileEntry) {
     readFromFileEntry(fileEntry, function(result) {
@@ -32,6 +34,7 @@ function readFromFile(file, callback) {
   }, errorHandler);
 }
 
+// Return to callback whether the file exists.
 function fileExists(file, callback) {
   globalFS.root.getFile(file, {}, function(fileEntry) {
     callback(true);
@@ -45,6 +48,8 @@ function fileExists(file, callback) {
   });
 }
 
+// Return to the callback the data of a file given
+// a file entry.
 function readFromFileEntry(fileEntry, callback) {
   fileEntry.file(function(file) {
 
@@ -62,6 +67,8 @@ function readFromFileEntry(fileEntry, callback) {
     }, errorHandler);
 }
 
+// Recursive function to read all the data from file entries.
+// and return the results to the callback.
 function readFromFileEntries(fileEntries, results, callback) {
   if(!fileEntries.length) {
     callback(results);
@@ -79,6 +86,7 @@ function readFromFileEntries(fileEntries, results, callback) {
 
 }
 
+// Return tagged objects to the callback.
 function getTaggedObjects(cb) {
   globalFS.root.getDirectory(tagFolder, {create: true}, function(dirEntry) {
     var fileEntries = [];
@@ -104,6 +112,8 @@ function getTaggedObjects(cb) {
   });
 }
 
+// Get all the tags that are assigned to objects.
+// Returns a unique list of them.
 function getTags(cb) {
   var tagSet = {};
   var tags = [];
@@ -134,6 +144,7 @@ function getTags(cb) {
   });
 }
 
+// Get the tags for a given yelp id.
 function getTagsForId(id, cb) {
   var file = tagFolder + id + ".txt";
   fileExists(file, function(exists) {
@@ -151,6 +162,7 @@ function getTagsForId(id, cb) {
   });
 }
 
+// Update the tags for an obj.
 function updateTags(obj, cb) {
   var file = tagFolder + obj.yelp_obj.id + ".txt";
   writeToFile(JSON.stringify(obj), file, function(e) {
@@ -165,6 +177,7 @@ function updateTags(obj, cb) {
   });
 }
 
+// Inner write to file function.
 function writeToFile(data, file, callback) {
   globalFS.root.getFile(file, {create:true}, function(fileEntry) {
     fileEntry.createWriter(function(fileWriter) {
@@ -186,6 +199,8 @@ function writeToFile(data, file, callback) {
 
 var tagFolder = "tags/";
 
+// Initiation our file system.
+// just create our tags folder.
 function initFS(fs){
   createDir(fs.root, tagFolder.split('/'));
   globalFS = fs;
