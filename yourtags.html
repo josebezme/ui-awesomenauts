@@ -44,15 +44,37 @@
 				// Adds the tag e to div#chosen-tags and removes it from the div#existing-tags.
 				var $e = $(e);
 
-				$e.attr('onclick', 'removeTag(this)');
+				$e.attr('onclick', '').unbind('click');
 
-				$e.remove();
 				$e.appendTo($('#filter-tags'));
 				$remove = $e.find($('.tag-remove'));
 				$remove.css('display', 'inline');
 
 				$e.removeClass('clear-both');
+				$e.removeClass('tag-clickable');
 				//	$("#tag-list").val($('#tag-list').val() + '"' + $e.attr("id") + '"'); 
+
+				displayResults();
+			}
+
+			function removeFilterTag(e) {
+				$e = $(e);
+				$tag = $e.parent();
+
+				$tag.appendTo($('#existing-tags'));
+				$e.css('display', 'none');
+				$tag.addClass('clear-both');
+				$tag.addClass('tag-clickable');
+
+				var id = $tag.attr('id');
+				var delayed = function() {
+					$tag.bind('click', function() {
+						addTag('#' + id);
+					});
+				}
+
+				setTimeout(delayed, 300);
+				displayResults();
 			}
 
 			function removeTagFromId(e, tag, id) {
@@ -82,17 +104,24 @@
 				tags.sort();
 			   	for(var i = 0; i < tags.length; i++) {
 			   		var tag = tags[i];
-			   		$('#existing-tags').append('<span id ="' + tag + '" class="tag tag-clickable clear-both pull-left" onclick="addTag(this);">' + tag + '<button class="close tag-remove" style="display:none; color: white;">&times;</button></span>');
+			   		$('#existing-tags').append('<span id ="' + tag + 
+			   			'" class="tag tag-clickable clear-both pull-left" ' + 
+			   			'onclick="addTag(this);">' + tag + 
+			   			'<button class="close tag-remove" style="display:none; color: white;" onclick="removeFilterTag(this);">&nbsp;&times;</button>' +
+			   			' </span>');
 			   	}
 			}
 
 			function getFilterTags() {
 				// Puts all selected tags into the #tag-list search form. File System API will use this list of tags to retrieve businesses. 
 
-				$("#tag-list").val("");
-				$("#filter-tags span").each(function(index) {
-					$("#tag-list").val($('#tag-list').val() + ' "' + $(this).attr("id") + '"');
+				var tags = [];
+
+				$("#filter-tags span").each(function(index, val) {
+					tags.push(val.id);
 				})
+
+				return tags;
 			}
 
 			function editObject(id) {
@@ -112,27 +141,35 @@
 
 			var resultObjects;
 			function displayResults() {
-				getFilterTags();
+				var tags = getFilterTags();
 				getTaggedObjects(function(objs) {
+
+					if(tags && tags.length > 0) {
+						var newObjs = [];
+
+						outer: for(var i = 0; i < objs.length; i++) {
+							var obj = objs[i];
+
+							var include = true;
+							for(var j = 0; j < tags.length; j++) {
+								if(!containsTag(obj, tags[j])) {
+									include = false;
+								}
+							}
+
+							if(include) {
+								newObjs.push(obj);	
+							}
+						}
+
+						objs = newObjs;
+					}
+
 					resultObjects = objs;
 					var template = $('#tagged-object-template').html();
 					var html = Mustache.to_html(template, objs);
 					$('#results').html(html);
 				   });
-					
-				function processTags(e, id) {
-				var $e = $(e);
-				jQuery.each($e, function(i, val){
-						$("#" + id + " div.biz-tags").append('<span id="' + val + '" class="tag pull-left">' + val + ' </span>');
-				});
-				}
-
-				function processCategories(e, id) {
-				var $e = $(e);
-				jQuery.each($e, function(i, val){
-						$("#" + id + " p.categories").append(val[0] + ", ");
-				});
-				}
 			}
 
 			var submitCallback = function() {
@@ -177,11 +214,9 @@
 				</div>
 				<div class="span10">
 					<!-- Main content for filtered businesses go here -->
-					<button type="submit" class="btn btn-info pull-left" onclick="displayResults()"> Filter </button>
-		  			<div id="filter-tags" class="span10 well well-small pull-left clear-right">
+		  			<div id="filter-tags" class="well " style="padding-top:5px;">
 					</div>
-					<input type="text" id="tag-list" class="input-large span12 search-query" placeholder="tags">
-					<div>
+					<div class="clear-right">
 						<h3> Filtered Results </h3>
 						<hr style="margin-top: 5px;">
 						<div id="results">

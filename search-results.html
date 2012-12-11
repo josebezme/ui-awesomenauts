@@ -75,7 +75,7 @@
          document.getElementById('searching').style.display = 'none';
       }
       function showMessageNoResultsQuery(){
-        //document.getElementById('no-results').style.display = 'block';
+        document.getElementById('no-results').style.display = 'block';
         document.getElementById('searching').style.display = 'none';
       }
 
@@ -117,7 +117,7 @@
                 document.getElementById('numberofresults').style.display = 'block';
                
                
-                if($numResults > 19){
+                if($numResults > 19) {
                   for(j=0; j < $numberOfPageResults -1 ; j++ ){
                       $('#totalresults').append('<option value="' + j + '">' + j + '</option>'); 
                   }
