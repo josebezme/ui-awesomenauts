@@ -125,14 +125,21 @@ clear-right {
 #results a, 
 #results a:visited, 
 #results a:active,
-#results a:hover 
+#results a:hover,
+.title a,
+.title a:hover,
+.title a:active,
+.title a:visited
  {
 	text-decoration: none;
-	color: black;
+	color: #C41200;
 } 
 
+.title a:hover,
+.title a:active,
 #results a:hover {
-	background: black;
+	color: black;
+	text-decoration: underline;
 }
 
 #results .middle {
