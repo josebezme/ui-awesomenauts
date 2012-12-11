@@ -104,6 +104,11 @@ function getTaggedObjects(cb) {
 function getTags(cb) {
   var tagSet = {};
   var tags = [];
+
+  // Add static tags
+  tagSet["try it"] = true;
+  tagSet["tried"] = true;
+
   getTaggedObjects(function(results) {
     for(var i = 0; i < results.length; i++) {
       var obj = results[i];
