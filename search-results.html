@@ -36,16 +36,17 @@
               {{/o.categories}}
             </p>
           </div>
-          <div class="middle span3 pull-left">
-            <img src="{{o.rating_img_url}}"> {{o.review_count}} reviews 
+          <div class="middle span2 pull-left">
+            <img src="{{o.rating_img_url}}"><br /> {{o.review_count}} reviews 
             <address>{{o.display_phone}}<br>{{o.location.address}}<br>{{o.location.city}}, {{o.location.state_code}}</address>
           </div>
-          <div class="span2 pull-right">
-            <button class="pull-right btn btn-large btn-success" onclick="return startTagIt(activeResults,{{idx}});"> Tag It! </button>
-
-            {{#tags}}
-              <span id="{{.}}" class="tag">{{.}}</span>
-            {{/tags}}
+          <div class="span2 middle pull-left">
+                {{#tags}}
+                  <span id="{{.}}" class="tag">{{.}}</span>
+                {{/tags}}
+          </div>
+          <div class="span1 middle pull-right">
+                <button class="pull-right btn btn-large btn-success" onclick="return startTagIt(activeResults,{{idx}});"> <br /> Tag&nbsp;It! <br /><br /> </button>
           </div>
         </div>
       {{/.}}
