@@ -16,7 +16,7 @@
 		<script src="bootstrap/js/bootstrap.min.js"></script>
 		<script type="text/javascript">
 
-			var file = "1.txt";
+			var file = "1.txt";// Here...
 			function readFile() {
 				readFromFile(file, function(results) {
 					if(results) {
@@ -49,7 +49,80 @@
 					});
 				}
 			}
+
+			var test_data;
+			function getTagsForIdTest() {
+
+				var obj = test_data[0];
+				var $tags = $('#test-results');
+				$tags.text("...");
+
+				getTagsForId(obj.yelp_obj.id, function(tags) {
+					if(!tags || tags.length == 0) {
+						$tags.text("No tags for : " + obj.yelp_obj.id);
+					} else {
+						$tags.text(tags.join(", "));
+					}
+				});
+
+				return false;
+			}
+
+			function updateTagsTest() {
+				var obj = test_data[0];
+				updateTags(obj, function(success) {
+					alert(success);
+				});
+
+			}
+
+			function getTaggedObjectsTest() {
+				getTaggedObjects(function(result) {
+					appendToBottom('#test-results', result);
+				});
+			}
+
+			function getTagsTest() {
+				getTags(function(tags) {
+
+					$('#test-results').text("");
+					$('<ul/>', {
+					    html: tags.join(', ')
+					  }).appendTo('#test-results');
+
+				});
+			}
+
+			function appendToBottom(selector,data) {
+				$(selector).text("");
+				var items = [];				
+				$.each(data, function(key, val) {
+				  	var tags = [];
+				    $.each(val.tags, function(k, v) {
+				    	tags.push(v);
+				    });
+
+			    items.push('<li> ' + val.yelp_obj.name + ': ' + tags.join(', ') + '</li>');
+
+				});
+
+				$('<ul/>', {
+				    html: items.join('')
+				  }).appendTo(selector);
+			}
+
+			$(document).ready( function (){ 
+				$.getJSON('data_wrapper.json', function(data) {
+					test_data = data;
+					appendToBottom('#test-data',data);
+				});	
+
+
+
+			});
+
 			
+
 		</script>
 	</head>
 	<body>
@@ -61,6 +134,19 @@
 			<br/><br/>
 			<input type="text" id="input" style="font-size: 24pt;height: 30px;"/>
 			<div id="results" class="well">I'm a well.</div>
+
+			<div id="test-data">
+
+				<h2>Test Data</h2>
+			</div>
+			<br />
+			<br />
+			<a href="#" class="button" onclick="return getTagsForIdTest();">GetTagsForId</a>
+			<a href="#" class="button" onclick="return updateTagsTest();">UpdateTags</a>
+			<a href="#" class="button" onclick="return getTaggedObjectsTest();">GetTaggedObjs</a>
+			<a href="#" class="button" onclick="return getTagsTest();">GetTags</a>
+			<br/><br/>
+			<div id="test-results" class="well">I'm a well.</div>
 		</div>
 	</body>
 </html>

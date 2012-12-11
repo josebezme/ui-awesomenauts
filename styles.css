@@ -27,6 +27,7 @@ clear-right {
 	background: #eee;
 	padding: 20px;
 	margin: 0 20px;
+	min-height: 2em;
 }
 
 .button {

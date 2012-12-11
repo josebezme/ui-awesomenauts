@@ -6,76 +6,52 @@
 		<title>UI Assignment 3</title>
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width">
-		<link rel="stylesheet" href="styles.css">
-		<script src="js/tag-filter.js"></script>
+		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" />
+		<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
+		<link href="styles.css" rel="stylesheet" />
 		<script src="js/fs-wrapper.js"></script>
-		<script src="js/yelp-wrapper.js"></script>
-		<script src="js/mustache.js"></script>
-		<script src="js/jquery_1.8.2.min.js"></script>
-		<script type="text/javascript">
+    	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    	<script src="js/tag-filter.js"></script>
+    	<script src="js/yelp-wrapper.js"></script>
+    	<script src="js/mustache.js"></script>
+    	<script src="js/jquery_1.8.2.min.js"></script>
+    	<script src="js/tag_assignment.js"></script>
+    	<script type="text/javascript">
 
-			function addTag(e) {
-				var $e = $(e);
-				
-				$e.unbind('click');
+			$(document).ready( function (){ 
+				$.getJSON('data_wrapper.json', function(data) {
+					tagItLoad(data[0]);
+				});	
+			});
 
-				$e.remove();
-				$e.appendTo($('#chosen-tags'));
-				$remove = $e.find($('.tag-remove'));
-				$remove.css('display', 'inline');
-
-				$e.removeClass('tag-clickable');
-			}
 		</script>
 	</head>
 	<body>
 		<br />
 		<br />
 		<div class="tag-assignment-wrapper">
-			<h2>Choose tags for</h2>
+			<h2>Choose tags for <span id="business-name" class="yelp-red"> Joe's Pizza </span></h2>
 			<div id="chosen-tags" class="tag-container">
-				<strong>{insert name}</strong>
-				<span class="tag">Sushi 
-					<span class="tag-remove">| 
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-					</span>
-				</span>
+
 			</div>
 			<h2>Existing Tags</h2>
 			<div id="existing-tags" class="tag-container">
-				<span class="tag tag-clickable" onclick="addTag(this);">Tried it
-					<span class="tag-remove" style="display:none;">| 
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-					</span>
-				</span>
-				<span class="tag tag-clickable" onclick="addTag(this);">Try it
-					<span class="tag-remove" style="display:none;">| 
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-					</span>
-				</span>
-
-
 			</div>
 
 			<h2>Recommended Tags</h2>
 			<div id="recommended-tags" class="tag-container">
-				<span class="tag tag-clickable" onclick="addTag(this);">Japanese
-					<span class="tag-remove" style="display:none;">| 
-						<a href="#" onclick="alert('Remove');return false;">X</a>
-					</span>
-				</span>
 
 			</div>
 
 			<h2>Add New Tag</h2>
-			<form>
-				<input type="text" style="width: 300px;font-size:18px;"/> 
-				<a href="#" class="button">Add</a>
+			<form onsubmit="return createTag()">
+				<input id="new-tag" type="text" style="width: 300px;font-size:18px;"/> 
+				<button type="submit" class="button" onclick="return createTag()">Add</button>
 			</form>
 
 			<div style="clear: both;"></div>
 			<div style="text-align:right;padding: 30px;">
-				<a href="#" class="button">Submit</a>
+				<a href="#" class="button" onclick="return submitTags();">Submit</a>
 			</div>
 		</div>
 
