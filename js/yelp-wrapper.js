@@ -3,10 +3,10 @@
  */
 
 var auth = {
-	consumerKey: "jCnzi9pusNImnVhcXZH1CQ", 
-	consumerSecret: "d23FQe0-zp7qJrOhjir38s3P0JE",
-	accessToken: "VJOXYgYA3MAH5OTTK_u4JtwFim_GIN7m",
-	accessTokenSecret: "tpS4CSD1aqK_jwH5SztNSdJy8EA",
+	consumerKey: "b83be9DX7E1CK7V4WOUu6g", 
+	consumerSecret: "X-vEK7f8C9Gtqn_XW6vFcAKv88c",
+	accessToken: "bFcGq4Z2UAIeKY4VV5c5XjTrWdtiuKbv",
+	accessTokenSecret: "rQbtXS60U2wWb0bVXBwsjqi7hzE",
 	serviceProvider: { 
 		signatureMethod: "HMAC-SHA1"
 	}
