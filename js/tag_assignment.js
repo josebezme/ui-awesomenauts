@@ -41,7 +41,14 @@ function tagIt_removeTagFromOthers(tag) {
 }
 
 function tagIt_createTag() {
-	createChosenTagByName($("#new-tag").val());
+	var tag = $("#new-tag").val();
+	if(!tag) {
+		return false;
+	}
+
+	tagIt_removeTagFromOthers(tag);
+
+	createChosenTagByName(tag);
 	$("#new-tag").val("");
 	$("#new-tag").attr("placeholder", "type new tag name...");
 	return false;
