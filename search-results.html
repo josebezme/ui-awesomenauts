@@ -26,11 +26,9 @@
           </div>
           <div class="span4 pull-left">
             <h4 class="title"><a href="{{o.url}}">{{o.name}}</a></h4>
-            <p><b> Neighborhoods: </b>{{o.neighborhoods}}</p>
+            <p><b> Neighborhoods: </b>{{o.location.neighborhoods}}</p>
             <p class="categories"><b> Categories: </b>
-              {{#o.categories}}
-                {{.[0]}}
-              {{/o.categories}}
+              {{o.display_cats}}
             </p>
           </div>
           <div class="middle span2 pull-left">
@@ -90,6 +88,14 @@
               $("#totalresults").empty();
               
               activeResults = data.businesses;
+
+              for(var i = 0; i < activeResults.length; i++) {
+                var obj = activeResults[i];
+                obj.display_cats = [];
+                for(var j = 0; j < obj.categories.length; j++) {
+                  obj.display_cats.push(obj.categories[j][0]);
+                }
+              }
 
               var $numResults = data.total;
               var $numberOfPageResults = data.total / 20;
