@@ -9,72 +9,30 @@
 		<link href="bootstrap/css/bootstrap.css" rel="stylesheet" />
 		<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet" />
 		<link href="styles.css" rel="stylesheet" />
+		<script src="js/fs-wrapper.js"></script>
     	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    	<script src="scripts/jquery.placeholder.min.js" type="text/javascript"></script>
-    	<script src="scripts/bootstrap.min.js" type="text/javascript"></script>
     	<script src="js/tag-filter.js"></script>
-    	<script src="js/fs-wrapper.js"></script>
     	<script src="js/yelp-wrapper.js"></script>
     	<script src="js/mustache.js"></script>
     	<script src="js/jquery_1.8.2.min.js"></script>
+    	<script src="js/tag_assignment.js"></script>
     	<script type="text/javascript">
-			function addTag(e) {
-				var $e = $(e);
-				
-				$e.attr('onclick', '').unbind('click');
 
-				$e.remove();
-				$e.appendTo($('#chosen-tags'));
-				$remove = $e.find($('.tag-remove'));
-				$remove.css('display', 'inline');
-				$e.removeClass('tag-clickable');
-			}
+			$(document).ready( function (){ 
+				$.getJSON('data_wrapper.json', function(data) {
+					tagItLoad(data[0]);
+				});	
+			});
 
-			function createTag() {
-				var $newtag = $("#new-tag").val();
-				$("#chosen-tags").append('<span id="' + $newtag + '" class="tag">' + $newtag + '<span class="tag-remove"> | <a href="#" onclick="removeTag(this,\'' + $newtag + '\');">X</a></span></span>');
-				$("#new-tag").val("");
-				$("#new-tag").attr("placeholder", "type new tag name...");
-
-				return false;
-			}
-
-			function removeTag(e, tagname) {
-				$e = $(e);
-				$tag = $e.parent().parent();
-				$remove = $tag.find($('.tag-remove'));
-				$remove.css('display', 'none');
-				$tag.addClass('tag-clickable');
-
-				var tagcat = $("#" + tagname).attr("data-tagcat");
-
-				if(tagcat) {
-					$tag.appendTo($('#' + tagcat));
-
-					var rebind = function() {
-						$tag.bind('click', function() {
-							addTag($tag);
-						});	
-					}
-					setTimeout(rebind, 300);	
-				} else {
-					$tag.remove();
-				}
-				
-			}
 		</script>
 	</head>
 	<body>
 		<br />
 		<br />
 		<div class="tag-assignment-wrapper">
-			<h2>Choose tags for<span id"business-name" class="yelp-red"> Joe's Pizza </span></h2>
+			<h2>Choose tags for <span id="business-name" class="yelp-red"> Joe's Pizza </span></h2>
 			<div id="chosen-tags" class="tag-container">
-				<span class="tag">Sushi 
-					<span class="tag-remove">| 
-						<a href="#" onclick="removeTag(this);">X</a>
-					</span>
-				</span>
+
 			</div>
 			<h2>Existing Tags</h2>
 			<div id="existing-tags" class="tag-container">
@@ -82,12 +40,6 @@
 
 			<h2>Recommended Tags</h2>
 			<div id="recommended-tags" class="tag-container">
-				<span id="Sashimi" class="tag tag-clickable" data-tagcat="recommended-tags" onclick="addTag(this);">
-				Sashimi
-					<span class="tag-remove" style="display:none;">| 
-						<a href="#" onclick="removeTag(this, 'Sashimi')">X</a>
-					</span>
-				</span>
 
 			</div>
 
@@ -99,7 +51,7 @@
 
 			<div style="clear: both;"></div>
 			<div style="text-align:right;padding: 30px;">
-				<a href="#" class="button">Submit</a>
+				<a href="#" class="button" onclick="return submitTags();">Submit</a>
 			</div>
 		</div>
 
