@@ -8,22 +8,22 @@ function showTagIt(){
 	$("#tagit").css('display', 'block');
 }
 
-function addTag(e) {
+function tagIt_addTag(e) {
 	var $e = $(e);
 	var tag = e.id;
 	
 	$e.attr('onclick', '').unbind('click');
 
 	$e.remove();
-	$e.appendTo($('#chosen-tags'));
+	$e.appendTo($('#tagit-chosen-tags'));
 	$remove = $e.find($('.tag-remove'));
 	$remove.css('display', 'inline');
 	$e.removeClass('tag-clickable');
 
-	removeTagFromOthers(tag);
+	tagIt_removeTagFromOthers(tag);
 }
 
-function removeTagFromOthers(tag) {
+function tagIt_removeTagFromOthers(tag) {
 	$('#recommended-tags span.tag').each(function(key, val){ 
 		if(val.id == tag) {
 			$(val).remove();
@@ -37,7 +37,7 @@ function removeTagFromOthers(tag) {
 	});
 }
 
-function createTag() {
+function tagIt_createTag() {
 	createChosenTagByName($("#new-tag").val());
 	$("#new-tag").val("");
 	$("#new-tag").attr("placeholder", "type new tag name...");
@@ -45,14 +45,19 @@ function createTag() {
 }
 
 function createChosenTagByName(tag) {
-	$("#chosen-tags").append('<span id="' + tag + '" class="tag">' + tag + '<span class="tag-remove"> | <a href="#" onclick="removeTag(this,\'' + tag + '\');">X</a></span></span>');
+	$("#tagit-chosen-tags").append('<span id="' + tag + '" class="tag">' + tag + 
+	'<span class="tag-remove"> | <a href="#" onclick="tagIt_removeTag(this,\'' + tag + 
+		'\');">X</a></span></span>');
 }
 
 function createSelectableTagByName(tag, dest) {
-	$("#" + dest).append('<span id="' + tag + '" class="tag tag-clickable"  onclick="addTag(this);">' + tag + '<span style="display:none;" class="tag-remove"> | <a href="#" onclick="removeTag(this,\'' + tag + '\');">X</a></span></span>');
+	$("#" + dest).append(
+		'<span id="' + tag + '" class="tag tag-clickable"  onclick="tagIt_addTag(this);">' 
+		+ tag + '<span style="display:none;" class="tag-remove"> | <a href="#" ' + 
+		'onclick="tagIt_removeTag(this,\'' + tag + '\');">X</a></span></span>');
 }
 
-function removeTag(e, tagname) {
+function tagIt_removeTag(e, tagname) {
 	$e = $(e);
 	$tag = $e.parent().parent();
 	$remove = $tag.find($('.tag-remove'));
@@ -60,25 +65,29 @@ function removeTag(e, tagname) {
 	$tag.addClass('tag-clickable');
 
 	if(containsRecommend(tagIt_obj, tagname)) {
-		createSelectableTagByName(tagname, "recommended-tags");
+		createSelectableTagByName(tagname, "tagit-recommended-tags");
 	}
 
 
-	if(isExistingTag(tagname)) {
-		createSelectableTagByName(tagname, "existing-tags");
+	if(tagIt_isExistingTag(tagname)) {
+		createSelectableTagByName(tagname, "tagit-existing-tags");
 	}
 
 	$tag.remove();
 }
 
-function submitTags() {
+function tagIt_submitTags(cb) {
 	var tags = [];
-	$('#chosen-tags span.tag').each(function(key, val){ 
+	$('#tagit-chosen-tags span.tag').each(function(key, val){ 
 		tags.push(val.id.toLowerCase());
 	});
 
 	tagIt_obj.tags = tags;
-	updateTags(tagIt_obj, function(success) {});
+	updateTags(tagIt_obj, function(success) {
+		if(cb) {
+			cb();
+		}
+	});
 
 	hideTagIt();
 
@@ -86,19 +95,19 @@ function submitTags() {
 }
 
 var tagIt_tags;
-function loadExistingTags() {
-	$('#existing-tags').empty();
+function tagIt_loadExistingTags() {
+	$('#tagit-existing-tags').empty();
 	getTags(function(tags){
 		tagIt_tags = tags;
 		for(var i = 0; i < tags.length; i++) {
 			if(!containsTag(tagIt_obj, tags[i])) {
-				createSelectableTagByName(tags[i], "existing-tags");	
+				createSelectableTagByName(tags[i], "tagit-existing-tags");	
 			}
 		}
 	});
 }
 
-function isExistingTag(tag) {
+function tagIt_isExistingTag(tag) {
 	for(var i = 0; i < tagIt_tags.length; i++) {
 		if(tagIt_tags[i] == tag) {
 			return true;
@@ -108,12 +117,12 @@ function isExistingTag(tag) {
 }
 
 function loadRecommendedTags(obj) {
-	$('#recommended-tags').empty();
+	$('#tagit-recommended-tags').empty();
 	var cats = obj.yelp_obj.categories;
 	for(var i = 0; i < cats.length; i++) {
 		var tag = cats[i][1];
 		if(!containsTag(obj, tag)) {
-			createSelectableTagByName(tag, "recommended-tags");
+			createSelectableTagByName(tag, "tagit-recommended-tags");
 		}
 	}
 }
@@ -141,7 +150,9 @@ var tagIt_obj;
 
 function tagItLoad(obj) {
 	tagIt_obj = obj;
-	$('#business-name').text(obj.yelp_obj.name);
+	$('#tagit-business-name').text(obj.yelp_obj.name);
+
+	$('#tagit-chosen-tags').empty();
 
 	getTagsForId(tagIt_obj.yelp_obj.id, function(results) {
 		tagIt_obj.tags = results;
@@ -150,10 +161,16 @@ function tagItLoad(obj) {
 		}
 
 		loadRecommendedTags(tagIt_obj);
-		loadExistingTags();
+		tagIt_loadExistingTags();
 	});
 }
 
+function startTagItWithObject(obj) {
+	showTagIt();
+	tagItLoad(obj);
+
+	return false;
+}
 
 function startTagIt(results, idx) {
 	var yelpObj = results[idx];

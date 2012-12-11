@@ -126,25 +126,7 @@
                 }
                 document.getElementById('searching').style.display = 'none';
 
-                var objects = [];
-
-                var buildTags = function(results, objects, cb, idx) {
-                  if(!objects.length) {
-                    cb(results);
-                  } else {
-                    getTagsForId(objects[0].id, function(tags) {
-                      results.push({"idx": idx, "o": objects[0], "tags": tags});
-
-                      buildTags(results, objects.splice(1), cb, idx + 1);
-                    });
-                  }
-                }
-
-                buildTags([], data.businesses, function(objects) {
-                  var template = $('#result_template').html();
-                  var html = Mustache.to_html(template, objects);
-                  $('#results').html(html);
-                }, 0);
+                redrawResults(activeResults);
 
               }
             }
@@ -152,6 +134,38 @@
           }
 
         return false;
+      }
+
+      var submitCallback = function() {
+        redrawResults(activeResults);
+      }
+
+      function redrawResults(objects) {
+
+        var buildTags = function(results, objects, cb, idx) {
+          if(!objects.length) {
+            cb(results);
+          } else {
+            getTagsForId(objects[0].id, function(tags) {
+              results.push({"idx": idx, "o": objects[0], "tags": tags});
+
+              buildTags(results, objects.splice(1), cb, idx + 1);
+            });
+          }
+        }
+
+        // Build new objects array.
+
+        var newObjects = [];
+        for(var i = 0; i < objects.length; i++) {
+          newObjects.push(objects[i]);
+        }
+
+        buildTags([], newObjects, function(objects) {
+          var template = $('#result_template').html();
+          var html = Mustache.to_html(template, objects);
+          $('#results').html(html);
+        }, 0);
       }
 
       $(document).ready( function (){ 
@@ -218,30 +232,30 @@
       </div>
     </div> 
 
-    <div id="tagit" style="display:none;">
+  <div id="tagit" style="display:none;">
       <div class="tag-assignment-wrapper">
-        <h2>Choose tags for <span id="business-name" class="yelp-red"> Joe's Pizza </span></h2>
-        <div id="chosen-tags" class="tag-container">
+        <h2>Choose tags for <span id="tagit-business-name" class="yelp-red"> Joe's Pizza </span></h2>
+        <div id="tagit-chosen-tags" class="tag-container">
 
         </div>
         <h2>Existing Tags</h2>
-        <div id="existing-tags" class="tag-container">
+        <div id="tagit-existing-tags" class="tag-container">
         </div>
 
         <h2>Recommended Tags</h2>
-        <div id="recommended-tags" class="tag-container">
+        <div id="tagit-recommended-tags" class="tag-container">
 
         </div>
 
         <h2>Add New Tag</h2>
         <form onsubmit="return createTag()">
           <input id="new-tag" type="text" style="width: 300px;font-size:18px;"/> 
-          <button type="submit" class="button" onclick="return createTag()">Add</button>
+          <button type="submit" class="button" onclick="return tagIt_createTag()">Add</button>
         </form>
 
         <div style="clear: both;"></div>
         <div style="text-align:right;padding: 30px;">
-          <a href="#" class="button" onclick="return submitTags();">Submit</a>
+          <a href="#" class="button" onclick="return tagIt_submitTags(submitCallback);">Submit</a>
         </div>
       </div>
     </div>

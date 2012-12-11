@@ -68,7 +68,10 @@ function readFromFileEntries(fileEntries, results, callback) {
   } else {
     readFromFileEntry(fileEntries[0], function(result) {
       var obj = JSON.parse(result);
-      results.push(obj);
+
+      if(obj.tags.length > 0) {
+        results.push(obj);
+      }
 
       readFromFileEntries(fileEntries.slice(1), results, callback);
     });
@@ -151,11 +154,13 @@ function getTagsForId(id, cb) {
 function updateTags(obj, cb) {
   var file = tagFolder + obj.yelp_obj.id + ".txt";
   writeToFile(JSON.stringify(obj), file, function(e) {
-    if(!e.error) {
-      cb(true);
-    } else {
-      cb(false);
-      errorHandler(e.target.error);
+    if(cb) {
+      if(!e.error) {
+        cb(true);
+      } else {
+        cb(false);
+        errorHandler(e.target.error);
+      }
     }
   });
 }
