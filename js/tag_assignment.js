@@ -1,11 +1,11 @@
 function hideTagIt(){
-	$("#screen").css('visibility', 'hidden');
-	$("#tagit").css('visibility', 'hidden');
+	$("#screen").css('display', 'none');
+	$("#tagit").css('display', 'none');
 }
 
 function showTagIt(){
-	$("#screen").css('visibility', 'visible');
-	$("#tagit").css('visibility', 'visible');
+	$("#screen").css('display', 'block');
+	$("#tagit").css('display', 'block');
 }
 
 function addTag(e) {
@@ -80,11 +80,14 @@ function submitTags() {
 	tagIt_obj.tags = tags;
 	updateTags(tagIt_obj, function(success) {});
 
+	hideTagIt();
+
 	return false;
 }
 
 var tagIt_tags;
 function loadExistingTags() {
+	$('#existing-tags').empty();
 	getTags(function(tags){
 		tagIt_tags = tags;
 		for(var i = 0; i < tags.length; i++) {
@@ -105,6 +108,7 @@ function isExistingTag(tag) {
 }
 
 function loadRecommendedTags(obj) {
+	$('#recommended-tags').empty();
 	var cats = obj.yelp_obj.categories;
 	for(var i = 0; i < cats.length; i++) {
 		var tag = cats[i][1];
@@ -149,3 +153,23 @@ function tagItLoad(obj) {
 		loadExistingTags();
 	});
 }
+
+
+function startTagIt(results, idx) {
+	var yelpObj = results[idx];
+
+	showTagIt();
+	var obj = {
+		"yelp_obj": yelpObj,
+		"tags": []
+	};
+
+	tagItLoad(obj);
+
+	return false;
+}
+
+
+
+
+

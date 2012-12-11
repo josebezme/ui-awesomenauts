@@ -13,12 +13,43 @@
     <script src="scripts/bootstrap.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
-
     <script src="js/tag-filter.js"></script>
     <script src="js/fs-wrapper.js"></script>
     <script src="js/yelp-wrapper.js"></script>
     <script src="js/mustache.js"></script>
     <script src="js/jquery_1.8.2.min.js"></script>
+    <script src="js/tag_assignment.js"></script>
+    <script id="result_template" type="text/template">
+      {{#.}}
+        <div id="{{o.id}}" class="well well-small clearfix result">
+          <div class="span2">
+            <img class="thumbnail" src="{{o.image_url}}">
+          </div>
+          <div class="span4 pull-left">
+            <a href="{{o.url}}">
+              <h4 class="yelp-red">{{o.name}}</h4>
+            </a> 
+            <p><b> Neighborhoods: </b>{{o.neighborhoods}}</p>
+            <p class="categories"><b> Categories: </b>
+              {{#o.categories}}
+                {{.[0]}}
+              {{/o.categories}}
+            </p>
+          </div>
+          <div class="middle span3 pull-left">
+            <img src="{{o.rating_img_url}}"> {{o.review_count}} reviews 
+            <address>{{o.display_phone}}<br>{{o.location.address}}<br>{{o.location.city}}, {{o.location.state_code}}</address>
+          </div>
+          <div class="span2 pull-right">
+            <button class="pull-right btn btn-large btn-success" onclick="return startTagIt(activeResults,{{idx}});"> Tag It! </button>
+
+            {{#tags}}
+              <span id="{{.}}" class="tag">{{.}}</span>
+            {{/tags}}
+          </div>
+        </div>
+      {{/.}}
+    </script>
     <script type="text/javascript">
       function hideHero() {
         $(".hero-unit").hide();
@@ -48,6 +79,8 @@
         document.getElementById('searching').style.display = 'none';
       }
 
+
+      var activeResults;
       function searchResults(numberofresults) {
 
           document.getElementById('bad-input').style.display = 'none';
@@ -63,66 +96,70 @@
           
           if($query=="" || $zip==""){
             showMessageBadQuery();
-          }
-
-          else{
+          } else {
               
-              var fun = function(data){
+            var fun = function(data){
                 
-                console.log(data);
-                $("#results").empty();
-                $("#numberofresults").empty();
-                $("#totalresults").empty();
+              console.log(data);
+              $("#results").empty();
+              $("#numberofresults").empty();
+              $("#totalresults").empty();
+              
+              activeResults = data.businesses;
+
+              var $numResults = data.total;
+              var $numberOfPageResults = data.total / 20;
                 
-                var $numResults = data.total;
-                var $numberOfPageResults = data.total / 20;
-                
-               if($numResults == 0){
+              if($numResults == 0){
                   showMessageNoResultsQuery();
-               }
-               else{
-                  $('#numberofresults').append('<p>Success: There are ' + $numResults + ' results</p>');
-                  document.getElementById('numberofresults').style.display = 'block';
-                 
-                 
-                  if($numResults > 19){
-                    for(j=0; j < $numberOfPageResults -1 ; j++ ){
-                        $('#totalresults').append('<option value="' + j + '">' + j + '</option>'); 
-                    }
-
-                    document.getElementById('showtotalresults').style.display = 'block';
+              } else {
+                $('#numberofresults').append('<p>Success: There are ' + $numResults + ' results</p>');
+                document.getElementById('numberofresults').style.display = 'block';
+               
+               
+                if($numResults > 19){
+                  for(j=0; j < $numberOfPageResults -1 ; j++ ){
+                      $('#totalresults').append('<option value="' + j + '">' + j + '</option>'); 
                   }
-                  document.getElementById('searching').style.display = 'none';
 
-                  for (i = 0; i < $numResults; i++) {
-                      var $id = data.businesses[i].id;
-                      var $name = data.businesses[i].name;
-                      var $categories = data.businesses[i].categories;
-                      var $display_phone = data.businesses[i].display_phone;
-                      var $image_url = data.businesses[i].image_url;
-                      var $address = data.businesses[i].location.address;
-                      var $city = data.businesses[i].location.city;
-                      var state = data.businesses[i].location.state_code;
-                      var $neighborhoods = data.businesses[i].location.neighborhoods;
-                      if(typeof($neighborhoods) == 'undefined') $neighborhoods = '';
-                      var $rating_img_url = data.businesses[i].rating_img_url;
-                      var $review_count = data.businesses[i].review_count;
-                      var $url = data.businesses[i].url;
-                      var $tags = data.businesses[i].tags;
-                      
-                      $('#results').append('<div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div><div class="span4 pull-left"><a href="' + $url + '"><h4 class="yelp-red">' + $name + '</h4></a> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + ', ' + state + '</address></div><div class="span2 pull-right"><button class="pull-right btn btn-large btn-success"> Tag It! </button></div></div>');
+                  document.getElementById('showtotalresults').style.display = 'block';
+                }
+                document.getElementById('searching').style.display = 'none';
 
-                     processTags($tags, $id);
-                     processCategories($categories, $id);
+                var objects = [];
+
+                var buildTags = function(results, objects, cb, idx) {
+                  if(!objects.length) {
+                    cb(results);
+                  } else {
+                    getTagsForId(objects[0].id, function(tags) {
+                      results.push({"idx": idx, "o": objects[0], "tags": tags});
+
+                      buildTags(results, objects.splice(1), cb, idx + 1);
+                    });
                   }
                 }
+
+                buildTags([], data.businesses, function(objects) {
+                  var template = $('#result_template').html();
+                  var html = Mustache.to_html(template, objects);
+                  $('#results').html(html);
+                }, 0);
+
               }
-          searchAndDo($("#query").val(), $("#zip").val(), directtopage , fun );             
-        }
-          
+            }
+            searchAndDo($("#query").val(), $("#zip").val(), directtopage , fun );             
+          }
+
+        return false;
       }
 
-      
+      $(document).ready( function (){ 
+        $.getJSON('data_wrapper.json', function(data) {
+
+        }); 
+      });
+
     </script> 
    
   </head>
@@ -141,12 +178,12 @@
             <li>
               <!-- Search Bar -->
               <div id="search-bar">
-  <!--              <form class="form-search search-bar"> -->
+
+              <form class="form-search search-bar" onsubmit="return searchResults(0);">
                   <input type="text" id="query" class="input-large span6 search-query" placeholder="search for (e.g. Mexican, Joe's Pizza, cheap)">
                   <input type="text" id="zip" class="input-large span2 search-query" placeholder="Location">
-                  <button type="button" class="btn btn-primary" onclick="searchResults(0)">Search for places</button>
-  <!--              </form>
-                <button type="button" class="btn btn-primary pull-right" style="margin-left: 10px;" onclick="searchResults()">Search for places</button> -->
+                  <button type="button" class="btn btn-primary" onclick="return searchResults(0);">Search for places</button>
+              </form>
               </div>
             </li>
           </ul>   
@@ -172,13 +209,42 @@
         </div>
        
         <!-- Search Results -->
-        <div id="results">
-          </div>
-         <div id="showtotalresults" class="well-small hide form-horizontal pull-right">
+        <div id="results"></div>
+
+        <div id="showtotalresults" class="well-small hide form-horizontal pull-right">
           <b>Results per page  <select style="width:50px" id="totalresults" class = "form-horizontal" onChange="searchResults(this.value)">  </select></b>
          
         </div>
       </div>
     </div> 
+
+    <div id="tagit" style="display:none;">
+      <div class="tag-assignment-wrapper">
+        <h2>Choose tags for <span id="business-name" class="yelp-red"> Joe's Pizza </span></h2>
+        <div id="chosen-tags" class="tag-container">
+
+        </div>
+        <h2>Existing Tags</h2>
+        <div id="existing-tags" class="tag-container">
+        </div>
+
+        <h2>Recommended Tags</h2>
+        <div id="recommended-tags" class="tag-container">
+
+        </div>
+
+        <h2>Add New Tag</h2>
+        <form onsubmit="return createTag()">
+          <input id="new-tag" type="text" style="width: 300px;font-size:18px;"/> 
+          <button type="submit" class="button" onclick="return createTag()">Add</button>
+        </form>
+
+        <div style="clear: both;"></div>
+        <div style="text-align:right;padding: 30px;">
+          <a href="#" class="button" onclick="return submitTags();">Submit</a>
+        </div>
+      </div>
+    </div>
+    <div id="screen" style="display:none;">&nbsp;</div>
   </body>
 </html>

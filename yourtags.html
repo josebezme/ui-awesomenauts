@@ -13,6 +13,30 @@
     <script src="js/yelp-wrapper.js"></script>
     <script src="js/mustache.js"></script>
     <script src="js/jquery_1.8.2.min.js"></script>
+    <script id="tagged-object-template" type="text/template">
+    	{{#.}}
+		    <div id="{{yelp_obj.id}}" class="well well-small clearfix result">
+		    	<div class="span3 pull-left">
+		    		<h4 class="yelp-red">
+		    			<a href="{{yelp_obj.url}}">
+		    			{{yelp_obj.name}}
+		    			</a>
+		    		</h4> 
+		    	</div>
+		    	<div class="middle span3 pull-left"> 
+		    		<img src="{{yelp_obj.rating_img_url}}"> 14 reviews 
+		    		<address>{{yelp_obj.display_phone}}</address>
+		    	</div>
+		    	<div class="span6 pull-left biz-tags">
+		    		<button class="pull-right btn btn-small btn-success"> Edit </button>
+
+		    		{{#tags}}
+				    <span id="{{.}}" class="tag">{{.}}<span class="tag-remove"> | <a href="#" onclick="removeTagFromId(this,'{{.}}', '{{yelp_obj.id}}'');">X</a></span></span>
+				    {{/tags}}
+		    	</div>
+		    </div>
+		{{/.}}
+    </script>
 		<script type="text/javascript">
 
 			function addTag(e) {
@@ -60,34 +84,36 @@
 				})
 			}
 
-			function displayResults(file) {
-					getChosenTags();
-				$.get(file, 
-					function(data){
-					$("#results").empty();	
-					var $numResults = data.businesses.length;
-				   	for (i = 0; i < $numResults; i++) {
-					   	var $id = data.businesses[i].id;
-					   	var $name = data.businesses[i].name;
-					   	var $categories = data.businesses[i].categories;
-					   	var $display_phone = data.businesses[i].display_phone;
-					   	var $image_url = data.businesses[i].image_url;
-					   	var $address = data.businesses[i].location.address;
-					   	var $city = data.businesses[i].location.city;
-					   	var $state_code = data.businesses[i].location.state_code;
-					   	var $neighborhoods = data.businesses[i].location.neighborhoods;
-					   	if(typeof($neighborhoods) == 'undefined') $neighborhoods = '';
-					   	var $rating_img_url = data.businesses[i].rating_img_url;
-					   	var $review_count = data.businesses[i].review_count;
-					   	var $url = data.businesses[i].url;
-					   	var $tags = data.businesses[i].tags;
+			function displayResults() {
+				getChosenTags();
+				getTaggedObjects(function(objs) {
+					var template = $('#tagged-object-template').html();
+					var html = Mustache.to_html(template, objs);
+					$('#results').html(html);
+					// var numResults = objs.length;
+				 //   	for (i = 0; i < numResults; i++) {
 
-					    $('#results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div> <div class="span3 pull-left"><h4 class="yelp-red">' + $name + '</h4> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + ', ' + $state_code + '</address></div><div class="span4 pull-left biz-tags"><button class="pull-right btn btn-large btn-success"> Edit Tags! </button><h4> Your Tags </h4></div></div></a>');
 
-					     processTags($tags, $id);
-					     processCategories($categories, $id);
-				    }
-				   }, "json");
+					   	// var $id = data.businesses[i].id;
+					   	// var $name = data.businesses[i].name;
+					   	// var $categories = data.businesses[i].categories;
+					   	// var $display_phone = data.businesses[i].display_phone;
+					   	// var $image_url = data.businesses[i].image_url;
+					   	// var $address = data.businesses[i].location.address;
+					   	// var $city = data.businesses[i].location.city;
+					   	// var $state_code = data.businesses[i].location.state_code;
+					   	// var $neighborhoods = data.businesses[i].location.neighborhoods;
+					   	// if(typeof($neighborhoods) == 'undefined') $neighborhoods = '';
+					   	// var $rating_img_url = data.businesses[i].rating_img_url;
+					   	// var $review_count = data.businesses[i].review_count;
+					   	// var $url = data.businesses[i].url;
+					   	// var $tags = data.businesses[i].tags;
+
+					    // $('#results').append('<a href="' + $url + '"> <div id ="' + $id + '"class="well well-small clearfix result"><div class="span2"><img class="thumbnail" src="' + $image_url + '"></div> <div class="span3 pull-left"><h4 class="yelp-red">' + $name + '</h4> <p><b> Neighborhoods: </b>' + $neighborhoods + '</p><p class="categories"><b> Categories: </b></div><div class="middle span3 pull-left"> <img src="' + $rating_img_url + '"> ' + $review_count + ' reviews <address>' + $display_phone + '<br>' + $address + '<br>' + $city + ', ' + $state_code + '</address></div><div class="span4 pull-left biz-tags"><button class="pull-right btn btn-large btn-success"> Edit Tags! </button><h4> Your Tags </h4></div></div></a>');
+
+					    //  processTags($tags, $id);
+					    //  processCategories($categories, $id);
+				   });
 					
 				function processTags(e, id) {
 				var $e = $(e);
@@ -109,6 +135,8 @@
 					getTags(function (tags){
 						loadExistingTags(tags);
 					});	
+
+					displayResults();
 				}
 
 				setTimeout(delayed, 500);
@@ -140,7 +168,7 @@
 				</div>
 				<div class="span10">
 					<!-- Main content for filtered businesses go here -->
-					<button type="submit" class="btn btn-info pull-left" onclick="displayResults('real-data.txt')"> Filter </button>
+					<button type="submit" class="btn btn-info pull-left" onclick="displayResults()"> Filter </button>
 		  			<div id="chosen-tags" class="span10 well well-small pull-left clear-right">
 					</div>
 					<input type="text" id="tag-list" class="input-large span12 search-query" placeholder="tags">
