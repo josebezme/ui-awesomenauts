@@ -1,3 +1,13 @@
+function hideTagIt(){
+	$("#screen").css('visibility', 'hidden');
+	$("#tagit").css('visibility', 'hidden');
+}
+
+function showTagIt(){
+	$("#screen").css('visibility', 'visible');
+	$("#tagit").css('visibility', 'visible');
+}
+
 function addTag(e) {
 	var $e = $(e);
 	var tag = e.id;
