@@ -54,7 +54,7 @@ function createSelectableTagByName(tag, dest) {
 	$("#" + dest).append(
 		'<span id="' + tag + '" class="tag tag-clickable"  onclick="tagIt_addTag(this);">' 
 		+ tag + '<span style="display:none;" class="tag-remove"> | <a href="#" ' + 
-		'onclick="tagIt_removeTag(this,\'' + tag + '\');">X</a></span></span>');
+		'onclick="tagIt_removeTag(this,\'' + tag + '\');">X</a></span></span> ');
 }
 
 function tagIt_removeTag(e, tagname) {

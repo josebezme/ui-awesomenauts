@@ -39,15 +39,27 @@ clear-right {
 .tag-assignment-wrapper {
 	background: #fff;
 	padding: 5px 20px 20px;
-	width: 600px;
+	width: 500px;
 	margin: auto;
+}
+
+.tag-assignment-wrapper h2 {
+	font-size: 1.2em;
+	line-height: 100%;
+}
+
+.tag-assignment-wrapper input {
+	margin-bottom: 0px;
+	margin-left: 20px;
 }
 
 .tag-container {
 	background: #eee;
-	padding: 20px;
+	padding: 10px;
+	min-height: 30px;
 	margin: 0 20px;
 	min-height: 2em;
+	line-height: 200%;
 }
 
 .button {
@@ -72,6 +84,7 @@ clear-right {
 	border-radius: 10px;
 	margin: 2px 5px 2px 0;
 	padding: 5px;
+	white-space: nowrap;
 }
 
 .tag-clickable {
