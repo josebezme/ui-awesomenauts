@@ -11,11 +11,14 @@ function showTagIt(){
 function tagIt_addTag(e) {
 	var $e = $(e);
 	var tag = e.id;
+
+
 	
 	$e.attr('onclick', '').unbind('click');
 
 	$e.remove();
 	$e.appendTo($('#tagit-chosen-tags'));
+	$('#tagit-chosen-tags').append(" ");
 	$remove = $e.find($('.tag-remove'));
 	$remove.css('display', 'inline');
 	$e.removeClass('tag-clickable');
@@ -24,13 +27,13 @@ function tagIt_addTag(e) {
 }
 
 function tagIt_removeTagFromOthers(tag) {
-	$('#recommended-tags span.tag').each(function(key, val){ 
+	$('#tagit-recommended-tags span.tag').each(function(key, val){ 
 		if(val.id == tag) {
 			$(val).remove();
 		}
 	});
 
-	$('#existing-tags span.tag').each(function(key, val){ 
+	$('#tagit-existing-tags span.tag').each(function(key, val){ 
 		if(val.id == tag) {
 			$(val).remove();
 		}
@@ -46,20 +49,21 @@ function tagIt_createTag() {
 
 function createChosenTagByName(tag) {
 	$("#tagit-chosen-tags").append('<span id="' + tag + '" class="tag">' + tag + 
-	'<span class="tag-remove"> | <a href="#" onclick="tagIt_removeTag(this,\'' + tag + 
-		'\');">X</a></span></span>');
+		'<button class="close tag-remove" onclick="return tagIt_removeTag(this,\'' + tag + 
+		'\');">&times;</button></span> ');
 }
 
 function createSelectableTagByName(tag, dest) {
 	$("#" + dest).append(
 		'<span id="' + tag + '" class="tag tag-clickable"  onclick="tagIt_addTag(this);">' 
-		+ tag + '<span style="display:none;" class="tag-remove"> | <a href="#" ' + 
-		'onclick="tagIt_removeTag(this,\'' + tag + '\');">X</a></span></span> ');
+		+ tag + 
+		'<button class="close tag-remove" style="display: none;" onclick="return tagIt_removeTag(this,\'' + tag + 
+		'\');">&times;</button></span> ');
 }
 
 function tagIt_removeTag(e, tagname) {
 	$e = $(e);
-	$tag = $e.parent().parent();
+	$tag = $e.parent();
 	$remove = $tag.find($('.tag-remove'));
 	$remove.css('display', 'none');
 	$tag.addClass('tag-clickable');

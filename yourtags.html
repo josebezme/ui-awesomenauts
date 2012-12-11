@@ -26,13 +26,17 @@
 		    		<img src="{{yelp_obj.rating_img_url}}"> 14 reviews 
 		    		<address>{{yelp_obj.display_phone}}</address>
 		    	</div>
-		    	<div class="span6 pull-left biz-tags">
-		    		<button class="pull-right btn btn-small btn-success"
-		    			onclick="return editObject('{{yelp_obj.id}}');"> Edit </button>
+		    	<div class="span5 pull-left biz-tags" style="overflow: wrap;line-height: 200%;">
 
 		    		{{#tags}}
-				    <span id="{{.}}" class="tag">{{.}}<span class="tag-remove"> | <a href="#" onclick="return removeTagFromId(this,'{{.}}', '{{yelp_obj.id}}');">X</a></span></span>
+				    <span id="{{.}}" class="tag" >{{.}}
+				    		<button class="close tag-remove" onclick="return removeTagFromId(this,'{{.}}', '{{yelp_obj.id}}');">&times;</button>
+				    </span> &nbsp;
 				    {{/tags}}
+		    	</div>
+		    	<div class="span1 pull-left">
+		    	<button class="pull-right btn btn-small btn-success"
+		    			onclick="return editObject('{{yelp_obj.id}}');"> Edit </button>
 		    	</div>
 		    </div>
 		{{/.}}
@@ -79,7 +83,7 @@
 			function removeTagFromId(e, tag, id) {
 				// Removes the tag e from div#chosen-tags and adds it back to div#existing-tags. 
 				var $e = $(e);
-				$e.parent().parent().remove();
+				$e.parent().remove();
 
 				var obj = getObjectById(id);
 

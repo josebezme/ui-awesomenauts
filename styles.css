@@ -99,6 +99,9 @@ clear-right {
 	color: #ccc;
 	font-family: 'Lucida Console', Monaco, monospace; 
 	padding: 3px;
+	color: white;display:inline;float:none;line-height:14px;
+	padding-top: 2px !important;
+	vertical-align: top;
 }
 
 .tag-remove a,
