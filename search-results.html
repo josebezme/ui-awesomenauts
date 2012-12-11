@@ -39,6 +39,7 @@
           }
 
       function searchResults() {
+        hideHero();
           var fun = function(data){
             console.log(data);
             $("#results").empty();
@@ -103,7 +104,7 @@
         </div>
         
         <!-- Hero Unit -->
-        <div class="hero-unit dl-horizontal clearfix" style="display: none;">
+        <div class="hero-unit dl-horizontal clearfix" style="display: inline;">
           <img src="bootstrap/img/yelp logo.png" class="img-small pull-right">
           <h1 class="pull-up">Yelp</h1>
           <div class="pull-down">Yelp is the best way to find great local business</div>
